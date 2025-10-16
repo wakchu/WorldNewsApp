@@ -28,7 +28,7 @@ public class News {
     @JoinTable(
         name = "news_country",
         joinColumns = @JoinColumn(name = "news_id"),
-        inverseJoinColumns = @JoinColumn(name = "country_iso")
+        inverseJoinColumns = @JoinColumn(name = "country_iso", referencedColumnName = "iso_code", insertable = false, updatable = false)
     )
     private Set<Country> countries = new HashSet<>();
 
