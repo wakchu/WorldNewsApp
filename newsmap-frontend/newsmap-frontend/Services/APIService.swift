@@ -2,16 +2,8 @@ import Foundation
 
 class APIService {
     
-    // URL base del backend (dal Config.plist)
-    private let baseURL: String
-    
-    init() {
-        if let url = Bundle.main.object(forInfoDictionaryKey: "API_BASE_URL") as? String {
-            self.baseURL = url
-        } else {
-            fatalError("API_BASE_URL non trovato in Config.plist")
-        }
-    }
+    let baseURL = Config.shared.baseURL
+
     
     // MARK: - Generic GET
     func get<T: Decodable>(endpoint: String, queryItems: [URLQueryItem]? = nil, token: String? = nil) async throws -> T {

@@ -11,17 +11,9 @@ struct WorldNewsMapApp: App {
     
     // ViewModels
     @StateObject private var authVM = AuthViewModel()
-    @StateObject private var mapVM = MapViewModel()
-    @StateObject private var newsVM = NewsViewModel()
+    @StateObject private var mapVM = MapViewModel(countryService: CountryService())
+    @StateObject private var newsVM = NewsViewModel(newsService: NewsService())
     @StateObject private var favoritesVM = FavoritesViewModel()
-    
-    init() {
-        _authVM = StateObject(wrappedValue: AuthViewModel(authService: authService))
-        _mapVM = StateObject(wrappedValue: MapViewModel(countryService: countryService))
-        _newsVM = StateObject(wrappedValue: NewsViewModel(newsService: newsService))
-        _favoritesVM = StateObject(wrappedValue: FavoritesViewModel())
-        _ = apiService // placeholder per evitare warning di variabile inutilizzata
-    }
     
     var body: some Scene {
         WindowGroup {
@@ -41,7 +33,7 @@ private struct RootView: View {
     
     var body: some View {
         Group {
-            if authVM.isAuthenticated {
+            if authVM.isLoggedIn {
                 TabView {
                     NavigationStack {
                         MapView()
@@ -64,9 +56,9 @@ private struct RootView: View {
                         Label("Preferiti", systemImage: "star")
                     }
                 }
-                .onAppear {
+                .task {
                     if mapVM.countries.isEmpty {
-                        mapVM.loadCountries()
+                        await mapVM.loadCountries()
                     }
                 }
             } else {
@@ -76,7 +68,9 @@ private struct RootView: View {
             }
         }
         .task(id: mapVM.selectedCountry?.code) {
-            if let country = mapVM.selectedCountry {
+            if let countryResponse = mapVM.selectedCountry {
+                // Map CountryResponse to Country expected by NewsViewModel
+                let country = Country(name: countryResponse.name, code: countryResponse.code)
                 await newsVM.loadTopHeadlines(for: country)
             }
         }
