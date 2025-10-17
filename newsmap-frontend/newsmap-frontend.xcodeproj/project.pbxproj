@@ -10,33 +10,9 @@
 		C076F2882EA27CA6006E795A /* newsmap-frontend.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "newsmap-frontend.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		C076F2F82EA283DA006E795A /* Exceptions for "newsmap-frontend" folder in "newsmap-frontend" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Resources/Config.plist,
-			);
-			target = C076F2872EA27CA6006E795A /* newsmap-frontend */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		C076F2F92EA283DA006E795A /* Exceptions for "newsmap-frontend" folder in "Compile Sources" phase from "newsmap-frontend" target */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = C076F2842EA27CA6006E795A /* Sources */;
-			membershipExceptions = (
-				Resources/Config.plist,
-			);
-		};
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C076F28A2EA27CA6006E795A /* newsmap-frontend */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				C076F2F82EA283DA006E795A /* Exceptions for "newsmap-frontend" folder in "newsmap-frontend" target */,
-				C076F2F92EA283DA006E795A /* Exceptions for "newsmap-frontend" folder in "Compile Sources" phase from "newsmap-frontend" target */,
-			);
 			path = "newsmap-frontend";
 			sourceTree = "<group>";
 		};
