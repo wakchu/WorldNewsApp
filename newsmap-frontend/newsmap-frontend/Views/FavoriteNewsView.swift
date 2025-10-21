@@ -1,0 +1,26 @@
+import SwiftUI
+
+struct FavoriteNewsView: View {
+    var body: some View {
+        NavigationStack {
+            VStack {
+                AppHeaderView()
+                Text("Hello World - Favorite News")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding()
+                
+                Spacer()
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(.systemBackground))
+            .navigationBarHidden(true)
+        }
+    }
+}
+
+struct FavoriteNewsView_Previews: PreviewProvider {
+    static var previews: some View {
+        FavoriteNewsView()
+    }
+}
