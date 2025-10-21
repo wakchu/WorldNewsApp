@@ -2,16 +2,20 @@ import SwiftUI
 
 struct FavoritesView: View {
     var body: some View {
-        VStack {
-            Text("Hello World")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding()
-            
-            Spacer()
+        NavigationStack {
+            TabView {
+                FavoriteNationsView()
+                    .tabItem {
+                        Label("Nations", systemImage: "flag.fill")
+                    }
+                
+                FavoriteNewsView()
+                    .tabItem {
+                        Label("News", systemImage: "newspaper.fill")
+                    }
+            }
+            .navigationBarHidden(true)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.systemBackground))
     }
 }
 

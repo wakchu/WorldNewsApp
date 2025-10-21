@@ -2,16 +2,20 @@ import SwiftUI
 
 struct NewsListView: View {
     var body: some View {
-        VStack {
-            Text("Hello World")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding()
-            
-            Spacer()
+        NavigationStack {
+            VStack {
+                AppHeaderView()
+                Text("Hello World")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding()
+                
+                Spacer()
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(.systemBackground))
+            .navigationBarHidden(true)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.systemBackground))
     }
 }
 

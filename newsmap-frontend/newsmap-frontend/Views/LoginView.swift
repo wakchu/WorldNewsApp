@@ -7,9 +7,10 @@ struct LoginView: View {
         NavigationView {
             VStack(spacing: 24) {
                 Text("WorldNewsMap")
-                    .font(.largeTitle.bold())
-                    .foregroundColor(.accentColor)
+                    .font(.custom("BBHSansHegarty-Regular", size: 34))
                     .padding(.top, 60)
+                    .foregroundColor(.accentColor)
+
                 
                 VStack(spacing: 16) {
                     TextField("Email", text: $viewModel.email)

@@ -4,5 +4,9 @@
 <dict>
 	<key>API_BASE_URL</key>
 	<string>http://172.17.49.185:8080</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>BBHSansHegarty-Regular.ttf</string>
+	</array>
 </dict>
 </plist>
