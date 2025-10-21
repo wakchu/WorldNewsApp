@@ -1,0 +1,434 @@
+[
+ {
+  "iso_code": "AF",
+  "name": "Afghanistan",
+  "region": "Southern Asia",
+  "lat": "33.939110",
+  "lon": "67.709953",
+  "timezone": "Asia\/Kabul"
+ },
+ {
+  "iso_code": "AL",
+  "name": "Albania",
+  "region": "Southern Europe",
+  "lat": "41.153332",
+  "lon": "20.168331",
+  "timezone": "Europe\/Tirane"
+ },
+ {
+  "iso_code": "DZ",
+  "name": "Algeria",
+  "region": "Northern Africa",
+  "lat": "28.033886",
+  "lon": "1.659626",
+  "timezone": "Africa\/Algiers"
+ },
+ {
+  "iso_code": "AD",
+  "name": "Andorra",
+  "region": "Western Europe",
+  "lat": "42.506285",
+  "lon": "1.521800",
+  "timezone": "Europe\/Andorra"
+ },
+ {
+  "iso_code": "AO",
+  "name": "Angola",
+  "region": "Central Africa",
+  "lat": "-11.202692",
+  "lon": "17.873887",
+  "timezone": "Africa\/Luanda"
+ },
+ {
+  "iso_code": "AG",
+  "name": "Antigua and Barbuda",
+  "region": "Caribbean",
+  "lat": "17.060816",
+  "lon": "-61.796428",
+  "timezone": "America\/Antigua"
+ },
+ {
+  "iso_code": "AR",
+  "name": "Argentina",
+  "region": "South America",
+  "lat": "-38.416097",
+  "lon": "-63.616672",
+  "timezone": "America\/Argentina\/Buenos_Aires"
+ },
+ {
+  "iso_code": "AM",
+  "name": "Armenia",
+  "region": "Western Asia",
+  "lat": "40.069099",
+  "lon": "45.038189",
+  "timezone": "Asia\/Yerevan"
+ },
+ {
+  "iso_code": "AU",
+  "name": "Australia",
+  "region": "Oceania",
+  "lat": "-25.274399",
+  "lon": "133.775136",
+  "timezone": "Australia\/Sydney"
+ },
+ {
+  "iso_code": "AT",
+  "name": "Austria",
+  "region": "Western Europe",
+  "lat": "47.516231",
+  "lon": "14.550072",
+  "timezone": "Europe\/Vienna"
+ },
+ {
+  "iso_code": "AZ",
+  "name": "Azerbaijan",
+  "region": "Western Asia",
+  "lat": "40.143105",
+  "lon": "47.576927",
+  "timezone": "Asia\/Baku"
+ },
+ {
+  "iso_code": "BS",
+  "name": "Bahamas",
+  "region": "Caribbean",
+  "lat": "24.286105",
+  "lon": "-76.671340",
+  "timezone": "America\/Nassau"
+ },
+ {
+  "iso_code": "BH",
+  "name": "Bahrain",
+  "region": "Western Asia",
+  "lat": "25.930414",
+  "lon": "50.637778",
+  "timezone": "Asia\/Bahrain"
+ },
+ {
+  "iso_code": "BD",
+  "name": "Bangladesh",
+  "region": "Southern Asia",
+  "lat": "23.684994",
+  "lon": "90.356331",
+  "timezone": "Asia\/Dhaka"
+ },
+ {
+  "iso_code": "BB",
+  "name": "Barbados",
+  "region": "Caribbean",
+  "lat": "13.193887",
+  "lon": "-59.543198",
+  "timezone": "America\/Barbados"
+ },
+ {
+  "iso_code": "BY",
+  "name": "Belarus",
+  "region": "Eastern Europe",
+  "lat": "53.709807",
+  "lon": "27.953158",
+  "timezone": "Europe\/Minsk"
+ },
+ {
+  "iso_code": "BE",
+  "name": "Belgium",
+  "region": "Western Europe",
+  "lat": "50.503887",
+  "lon": "4.469936",
+  "timezone": "Europe\/Brussels"
+ },
+ {
+  "iso_code": "BZ",
+  "name": "Belize",
+  "region": "Central America",
+  "lat": "17.189877",
+  "lon": "-88.497650",
+  "timezone": "America\/Belize"
+ },
+ {
+  "iso_code": "BJ",
+  "name": "Benin",
+  "region": "Western Africa",
+  "lat": "9.307690",
+  "lon": "2.315834",
+  "timezone": "Africa\/Porto-Novo"
+ },
+ {
+  "iso_code": "BT",
+  "name": "Bhutan",
+  "region": "Southern Asia",
+  "lat": "27.514162",
+  "lon": "90.433601",
+  "timezone": "Asia\/Thimphu"
+ },
+ {
+  "iso_code": "BO",
+  "name": "Bolivia",
+  "region": "South America",
+  "lat": "-16.290154",
+  "lon": "-63.588653",
+  "timezone": "America\/La_Paz"
+ },
+ {
+  "iso_code": "BA",
+  "name": "Bosnia and Herzegovina",
+  "region": "Southern Europe",
+  "lat": "43.915888",
+  "lon": "17.679076",
+  "timezone": "Europe\/Sarajevo"
+ },
+ {
+  "iso_code": "BW",
+  "name": "Botswana",
+  "region": "Southern Africa",
+  "lat": "-22.328474",
+  "lon": "24.684866",
+  "timezone": "Africa\/Gaborone"
+ },
+ {
+  "iso_code": "BR",
+  "name": "Brazil",
+  "region": "South America",
+  "lat": "-14.235004",
+  "lon": "-51.925280",
+  "timezone": "America\/Sao_Paulo"
+ },
+ {
+  "iso_code": "BN",
+  "name": "Brunei Darussalam",
+  "region": "South-Eastern Asia",
+  "lat": "4.535277",
+  "lon": "114.727669",
+  "timezone": "Asia\/Brunei"
+ },
+ {
+  "iso_code": "BG",
+  "name": "Bulgaria",
+  "region": "Eastern Europe",
+  "lat": "42.733883",
+  "lon": "25.485830",
+  "timezone": "Europe\/Sofia"
+ },
+ {
+  "iso_code": "BF",
+  "name": "Burkina Faso",
+  "region": "Western Africa",
+  "lat": "12.238333",
+  "lon": "-1.856000",
+  "timezone": "Africa\/Ouagadougou"
+ },
+ {
+  "iso_code": "BI",
+  "name": "Burundi",
+  "region": "Eastern Africa",
+  "lat": "-3.373056",
+  "lon": "29.918886",
+  "timezone": "Africa\/Bujumbura"
+ },
+ {
+  "iso_code": "KH",
+  "name": "Cambodia",
+  "region": "South-Eastern Asia",
+  "lat": "12.565679",
+  "lon": "104.990963",
+  "timezone": "Asia\/Phnom_Penh"
+ },
+ {
+  "iso_code": "CM",
+  "name": "Cameroon",
+  "region": "Central Africa",
+  "lat": "7.369722",
+  "lon": "12.354722",
+  "timezone": "Africa\/Douala"
+ },
+ {
+  "iso_code": "CA",
+  "name": "Canada",
+  "region": "Northern America",
+  "lat": "56.130366",
+  "lon": "-106.346771",
+  "timezone": "America\/Toronto"
+ },
+ {
+  "iso_code": "CV",
+  "name": "Cabo Verde",
+  "region": "Western Africa",
+  "lat": "15.110000",
+  "lon": "-23.610000",
+  "timezone": "Atlantic\/Cape_Verde"
+ },
+ {
+  "iso_code": "CF",
+  "name": "Central African Republic",
+  "region": "Central Africa",
+  "lat": "6.611111",
+  "lon": "20.939444",
+  "timezone": "Africa\/Bangui"
+ },
+ {
+  "iso_code": "TD",
+  "name": "Chad",
+  "region": "Central Africa",
+  "lat": "15.454166",
+  "lon": "18.732207",
+  "timezone": "Africa\/Ndjamena"
+ },
+ {
+  "iso_code": "CL",
+  "name": "Chile",
+  "region": "South America",
+  "lat": "-35.675147",
+  "lon": "-71.542969",
+  "timezone": "America\/Santiago"
+ },
+ {
+  "iso_code": "CN",
+  "name": "China",
+  "region": "Eastern Asia",
+  "lat": "35.861660",
+  "lon": "104.195397",
+  "timezone": "Asia\/Shanghai"
+ },
+ {
+  "iso_code": "CO",
+  "name": "Colombia",
+  "region": "South America",
+  "lat": "4.570868",
+  "lon": "-74.297333",
+  "timezone": "America\/Bogota"
+ },
+ {
+  "iso_code": "KM",
+  "name": "Comoros",
+  "region": "Eastern Africa",
+  "lat": "-11.645500",
+  "lon": "43.333300",
+  "timezone": "Indian\/Comoro"
+ },
+ {
+  "iso_code": "CG",
+  "name": "Congo (Republic of the)",
+  "region": "Central Africa",
+  "lat": "-0.228021",
+  "lon": "15.828859",
+  "timezone": "Africa\/Brazzaville"
+ },
+ {
+  "iso_code": "CD",
+  "name": "Congo (Democratic Republic of the)",
+  "region": "Central Africa",
+  "lat": "-4.038333",
+  "lon": "21.758664",
+  "timezone": "Africa\/Kinshasa"
+ },
+ {
+  "iso_code": "CR",
+  "name": "Costa Rica",
+  "region": "Central America",
+  "lat": "9.748917",
+  "lon": "-83.753428",
+  "timezone": "America\/Costa_Rica"
+ },
+ {
+  "iso_code": "CI",
+  "name": "Côte d’Ivoire",
+  "region": "Western Africa",
+  "lat": "7.539989",
+  "lon": "-5.547080",
+  "timezone": "Africa\/Abidjan"
+ },
+ {
+  "iso_code": "HR",
+  "name": "Croatia",
+  "region": "Southern Europe",
+  "lat": "45.100000",
+  "lon": "15.200000",
+  "timezone": "Europe\/Zagreb"
+ },
+ {
+  "iso_code": "CU",
+  "name": "Cuba",
+  "region": "Caribbean",
+  "lat": "21.521757",
+  "lon": "-77.781167",
+  "timezone": "America\/Havana"
+ },
+ {
+  "iso_code": "CY",
+  "name": "Cyprus",
+  "region": "Western Asia",
+  "lat": "35.126413",
+  "lon": "33.429859",
+  "timezone": "Asia\/Nicosia"
+ },
+ {
+  "iso_code": "CZ",
+  "name": "Czechia",
+  "region": "Eastern Europe",
+  "lat": "49.817492",
+  "lon": "15.472962",
+  "timezone": "Europe\/Prague"
+ },
+ {
+  "iso_code": "DK",
+  "name": "Denmark",
+  "region": "Northern Europe",
+  "lat": "56.263920",
+  "lon": "9.501785",
+  "timezone": "Europe\/Copenhagen"
+ },
+ {
+  "iso_code": "DJ",
+  "name": "Djibouti",
+  "region": "Eastern Africa",
+  "lat": "11.825138",
+  "lon": "42.590275",
+  "timezone": "Africa\/Djibouti"
+ },
+ {
+  "iso_code": "DM",
+  "name": "Dominica",
+  "region": "Caribbean",
+  "lat": "15.414999",
+  "lon": "-61.370976",
+  "timezone": "America\/Dominica"
+ },
+ {
+  "iso_code": "DO",
+  "name": "Dominican Republic",
+  "region": "Caribbean",
+  "lat": "18.735693",
+  "lon": "-70.162651",
+  "timezone": "America\/Santo_Domingo"
+ },
+ {
+  "iso_code": "EC",
+  "name": "Ecuador",
+  "region": "South America",
+  "lat": "-1.831239",
+  "lon": "-78.183406",
+  "timezone": "America\/Guayaquil"
+ },
+ {
+  "iso_code": "EG",
+  "name": "Egypt",
+  "region": "Northern Africa",
+  "lat": "26.820553",
+  "lon": "30.802498",
+  "timezone": "Africa\/Cairo"
+ },
+ {
+  "iso_code": "SV",
+  "name": "El Salvador",
+  "region": "Central America",
+  "lat": "13.794185",
+  "lon": "-88.896530",
+  "timezone": "America\/El_Salvador"
+ },
+ {
+  "iso_code": "GQ",
+  "name": "Equatorial Guinea",
+  "region": "Central Africa",
+  "lat": "1.650801",
+  "lon": "10.267895",
+  "timezone": "Africa\/Malabo"
+ }
+]
