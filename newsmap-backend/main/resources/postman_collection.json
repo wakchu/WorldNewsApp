@@ -6,324 +6,356 @@
   },
   "item": [
     {
-      "name": "Register User",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"password\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register User",
+          "description": "Register a new user.",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"password\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
             }
-          }
+          },
+          "response": []
         },
-        "url": {
-          "raw": "{{baseUrl}}/api/auth/register",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "auth",
-            "register"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get All Countries",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/api/countries",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "countries"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Fetch News for Country",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/api/fetch-news/:countryCode",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "fetch-news",
-            ":countryCode"
-          ],
-          "variable": [
-            {
-              "key": "countryCode",
-              "value": "us"
+        {
+          "name": "Login User",
+          "description": "Login an existing user and get a JWT token.",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"password\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
             }
-          ]
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "Get All News",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/api/news",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "news"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get News by Country",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/api/news/by-country/:isoCode",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "news",
-            "by-country",
-            ":isoCode"
-          ],
-          "variable": [
-            {
-              "key": "isoCode",
-              "value": "us"
+      "name": "Countries",
+      "item": [
+        {
+          "name": "Get All Countries",
+          "description": "Get a list of all countries.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/countries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "countries"
+              ]
             }
-          ]
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "Login User",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"password\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
+      "name": "News",
+      "item": [
+        {
+          "name": "Fetch News for Country",
+          "description": "Fetch news for a specific country from an external API.",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/fetch-news/:countryCode",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "fetch-news",
+                ":countryCode"
+              ],
+              "variable": [
+                {
+                  "key": "countryCode",
+                  "value": "us"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
-        "url": {
-          "raw": "{{baseUrl}}/api/auth/login",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "auth",
-            "login"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get News By Id",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/api/news/:id",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "news",
-            ":id"
-          ],
-          "variable": [
-            {
-              "key": "id",
-              "value": "1"
+        {
+          "name": "Get All News",
+          "description": "Get a list of all news.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/news",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "news"
+              ]
             }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get My Profile",
-      "request": {
-        "method": "GET",
-        "header": [
-          {
-            "key": "Authorization",
-            "value": "Bearer {{jwt_token}}"
-          }
-        ],
-        "url": {
-          "raw": "{{baseUrl}}/api/users/me",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "users",
-            "me"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Add Bookmark",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Authorization",
-            "value": "Bearer {{jwt_token}}"
-          }
-        ],
-        "url": {
-          "raw": "{{baseUrl}}/api/users/me/bookmarks/:newsId",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "users",
-            "me",
-            "bookmarks",
-            ":newsId"
-          ],
-          "variable": [
-            {
-              "key": "newsId",
-              "value": "1"
+          },
+          "response": []
+        },
+        {
+          "name": "Get News by Country",
+          "description": "Get a list of news for a specific country.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/by-country/:isoCode",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "news",
+                "by-country",
+                ":isoCode"
+              ],
+              "variable": [
+                {
+                  "key": "isoCode",
+                  "value": "us"
+                }
+              ]
             }
-          ]
+          },
+          "response": []
+        },
+        {
+          "name": "Get News By Id",
+          "description": "Get a specific news by its ID.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "news",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "Add Favorite Country",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Authorization",
-            "value": "Bearer {{jwt_token}}"
-          }
-        ],
-        "url": {
-          "raw": "{{baseUrl}}/api/users/me/countries/:countryIso",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "users",
-            "me",
-            "countries",
-            ":countryIso"
-          ],
-          "variable": [
-            {
-              "key": "countryIso",
-              "value": "us"
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get My Profile",
+          "description": "Get the profile of the current user.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "me"
+              ]
             }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Remove Bookmark",
-      "request": {
-        "method": "DELETE",
-        "header": [
-          {
-            "key": "Authorization",
-            "value": "Bearer {{jwt_token}}"
-          }
-        ],
-        "url": {
-          "raw": "{{baseUrl}}/api/users/me/bookmarks/:newsId",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "users",
-            "me",
-            "bookmarks",
-            ":newsId"
-          ],
-          "variable": [
-            {
-              "key": "newsId",
-              "value": "1"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Bookmark",
+          "description": "Add a news to the bookmarks of the current user.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me/bookmarks/:newsId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "me",
+                "bookmarks",
+                ":newsId"
+              ],
+              "variable": [
+                {
+                  "key": "newsId",
+                  "value": "1"
+                }
+              ]
             }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Remove Favorite Country",
-      "request": {
-        "method": "DELETE",
-        "header": [
-          {
-            "key": "Authorization",
-            "value": "Bearer {{jwt_token}}"
-          }
-        ],
-        "url": {
-          "raw": "{{baseUrl}}/api/users/me/countries/:countryIso",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "users",
-            "me",
-            "countries",
-            ":countryIso"
-          ],
-          "variable": [
-            {
-              "key": "countryIso",
-              "value": "us"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Favorite Country",
+          "description": "Add a country to the favorite countries of the current user.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me/countries/:countryIso",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "me",
+                "countries",
+                ":countryIso"
+              ],
+              "variable": [
+                {
+                  "key": "countryIso",
+                  "value": "us"
+                }
+              ]
             }
-          ]
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Bookmark",
+          "description": "Remove a news from the bookmarks of the current user.",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me/bookmarks/:newsId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "me",
+                "bookmarks",
+                ":newsId"
+              ],
+              "variable": [
+                {
+                  "key": "newsId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Favorite Country",
+          "description": "Remove a country from the favorite countries of the current user.",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me/countries/:countryIso",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "me",
+                "countries",
+                ":countryIso"
+              ],
+              "variable": [
+                {
+                  "key": "countryIso",
+                  "value": "us"
+                }
+              ]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     }
   ]
 }
