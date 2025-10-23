@@ -260,6 +260,70 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "Remove Bookmark",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/users/me/bookmarks/:newsId",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "me",
+            "bookmarks",
+            ":newsId"
+          ],
+          "variable": [
+            {
+              "key": "newsId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Remove Favorite Country",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/users/me/countries/:countryIso",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "me",
+            "countries",
+            ":countryIso"
+          ],
+          "variable": [
+            {
+              "key": "countryIso",
+              "value": "us"
+            }
+          ]
+        }
+      },
+      "response": []
     }
   ]
 }

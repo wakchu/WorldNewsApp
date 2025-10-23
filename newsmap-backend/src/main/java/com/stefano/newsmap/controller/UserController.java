@@ -66,4 +66,32 @@ public class UserController {
 
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/me/bookmarks/{newsId}")
+    public ResponseEntity<?> removeBookmark(@PathVariable Long newsId, Principal principal) {
+        User user = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        News news = newsRepository.findById(newsId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "News not found"));
+
+        user.getFavoriteNews().remove(news);
+        userRepository.save(user);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/me/countries/{countryIso}")
+    public ResponseEntity<?> removeFavoriteCountry(@PathVariable String countryIso, Principal principal) {
+        User user = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Country country = countryRepository.findById(countryIso)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Country not found"));
+
+        user.getFavoriteCountries().remove(country);
+        userRepository.save(user);
+
+        return ResponseEntity.ok().build();
+    }
 }
