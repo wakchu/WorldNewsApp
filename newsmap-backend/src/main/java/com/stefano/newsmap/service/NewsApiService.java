@@ -7,6 +7,7 @@ import com.stefano.newsmap.model.Source;
 import com.stefano.newsmap.repository.CountryRepository;
 import com.stefano.newsmap.repository.NewsRepository;
 import com.stefano.newsmap.repository.SourceRepository;
+import com.stefano.newsmap.repository.UserRepository;
 import com.stefano.newsmap.service.dto.NewsApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,8 +20,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.transaction.annotation.Transactional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class NewsApiService {
+
+    private static final Logger logger = LoggerFactory.getLogger(NewsApiService.class);
 
     @Value("${newsapi.key}")
     private String apiKey;
@@ -37,18 +45,26 @@ public class NewsApiService {
     @Autowired
     private SourceRepository sourceRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     private final RestClient restClient = RestClient.create();
 
+    @Transactional
     public void fetchAndSaveNews(String countryCode) {
         try {
+            userRepository.clearFavoriteNews();
+            newsRepository.deleteAll();
             NewsApiResponse newsApiResponse = restClient.get()
                     .uri(apiUrl + "?country={country}&apiKey={apiKey}", countryCode.toLowerCase(), apiKey)
                     .retrieve()
                     .body(NewsApiResponse.class);
 
-            if (newsApiResponse == null || newsApiResponse.getArticles() == null) {
-                return;
+            if (newsApiResponse == null || newsApiResponse.getArticles() == null || newsApiResponse.getArticles().isEmpty()) {
+                throw new IllegalStateException("No news articles received from the API.");
             }
+
+            logger.info("Received {} articles from the API.", newsApiResponse.getArticles().size());
 
             for (NewsApiResponse.Article article : newsApiResponse.getArticles()) {
                 // Source
@@ -60,8 +76,8 @@ public class NewsApiService {
                         });
 
                 // Country
-                Country country = countryRepository.findById(countryCode).orElse(null);
-                if (country == null) continue;
+                Country country = countryRepository.findById(countryCode.toUpperCase())
+                        .orElseThrow(() -> new IllegalArgumentException("Country with code '" + countryCode.toUpperCase() + "' not found in the database."));
 
                 Set<Country> countries = new HashSet<>();
                 countries.add(country);

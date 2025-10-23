@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 public class Country {
 
     @Id
-    @Column(name = "iso_code", columnDefinition = "CHAR(2)")
+    @Column(name = "iso_code", columnDefinition = "CHAR(2)", updatable = false)
     private String isoCode;
 
     @Column(nullable = false)

@@ -20,15 +20,16 @@ public class News {
     @Column(nullable = false)
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
     private String url;
     private LocalDateTime publishedAt;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
         name = "news_country",
         joinColumns = @JoinColumn(name = "news_id"),
-        inverseJoinColumns = @JoinColumn(name = "country_iso", referencedColumnName = "iso_code", insertable = false, updatable = false)
+        inverseJoinColumns = @JoinColumn(name = "country_iso", referencedColumnName = "iso_code")
     )
     private Set<Country> countries = new HashSet<>();
 
