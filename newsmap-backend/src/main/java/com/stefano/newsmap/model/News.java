@@ -23,9 +23,11 @@ public class News {
     @Column(columnDefinition = "TEXT")
     private String description;
     private String url;
+    @Column(length = 2048)
+    private String imageUrl;
     private LocalDateTime publishedAt;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(
         name = "news_country",
         joinColumns = @JoinColumn(name = "news_id"),
@@ -36,11 +38,12 @@ public class News {
     // costruttori, getter e setter
     public News() {
     }
-    public News(Source source, String title, String description, String url, LocalDateTime publishedAt, Set<Country> countries) {
+    public News(Source source, String title, String description, String url, String imageUrl, LocalDateTime publishedAt, Set<Country> countries) {
         this.source = source;
         this.title = title;
         this.description = description;
         this.url = url;
+        this.imageUrl = imageUrl;
         this.publishedAt = publishedAt;
         this.countries = countries;
     }
@@ -74,6 +77,12 @@ public class News {
     public void setUrl(String url) {
         this.url = url;
     }
+    public String getImageUrl() {
+        return imageUrl;
+    }
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
     public LocalDateTime getPublishedAt() {
         return publishedAt;
     }
@@ -96,6 +105,7 @@ public class News {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", url='" + url + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
                 ", publishedAt=" + publishedAt +
                 ", countries=" + countries +
                 '}';

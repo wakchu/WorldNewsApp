@@ -53,31 +53,31 @@ public class NewsApiService {
     @Transactional
     public void fetchAndSaveNews(String countryCode) {
         try {
-            userRepository.clearFavoriteNews();
-            newsRepository.deleteAll();
+
+
             NewsApiResponse newsApiResponse = restClient.get()
-                    .uri(apiUrl + "?country={country}&apiKey={apiKey}", countryCode.toLowerCase(), apiKey)
+                    .uri(apiUrl + "?country={country}&apikey={apiKey}", countryCode.toLowerCase(), apiKey)
                     .retrieve()
                     .body(NewsApiResponse.class);
 
-            if (newsApiResponse == null || newsApiResponse.getArticles() == null || newsApiResponse.getArticles().isEmpty()) {
+            if (newsApiResponse == null || newsApiResponse.getResults() == null || newsApiResponse.getResults().isEmpty()) {
                 throw new IllegalStateException("No news articles received from the API.");
             }
 
-            logger.info("Received {} articles from the API.", newsApiResponse.getArticles().size());
+            logger.info("Received {} articles from the API.", newsApiResponse.getResults().size());
 
-            for (NewsApiResponse.Article article : newsApiResponse.getArticles()) {
+            for (NewsApiResponse.Article article : newsApiResponse.getResults()) {
                 // Source
-                Source source = sourceRepository.findByName(article.getSource().getName())
+                Source source = sourceRepository.findByName(article.getSourceName())
                         .orElseGet(() -> {
                             Source s = new Source();
-                            s.setName(article.getSource().getName());
+                            s.setName(article.getSourceName());
                             return sourceRepository.save(s);
                         });
 
                 // Country
                 Country country = countryRepository.findById(countryCode.toUpperCase())
-                        .orElseThrow(() -> new IllegalArgumentException("Country with code '" + countryCode.toUpperCase() + "' not found in the database."));
+                        .orElseThrow(() -> new IllegalArgumentException("Country with code \'" + countryCode.toUpperCase() + "\' not found in the database."));
 
                 Set<Country> countries = new HashSet<>();
                 countries.add(country);
@@ -85,8 +85,7 @@ public class NewsApiService {
                 // Convert publishedAt in LocalDateTime
                 LocalDateTime publishedAt = null;
                 if (article.getPublishedAt() != null) {
-                    publishedAt = ZonedDateTime.parse(article.getPublishedAt(), DateTimeFormatter.ISO_DATE_TIME)
-                            .toLocalDateTime();
+                    publishedAt = LocalDateTime.parse(article.getPublishedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                 }
 
                 // News
@@ -94,6 +93,7 @@ public class NewsApiService {
                 news.setTitle(article.getTitle());
                 news.setDescription(article.getDescription());
                 news.setUrl(article.getUrl());
+                news.setImageUrl(article.getImageUrl());
                 news.setPublishedAt(publishedAt != null ? publishedAt : LocalDateTime.now());
                 news.setSource(source);
                 news.setCountries(countries);

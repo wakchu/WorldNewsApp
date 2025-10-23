@@ -1,11 +1,12 @@
 package com.stefano.newsmap.service.dto;
 
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class NewsApiResponse {
     private String status;
     private int totalResults;
-    private List<Article> articles;
+    private List<Article> results;
 
     // getter e setter
     public String getStatus() {
@@ -20,76 +21,82 @@ public class NewsApiResponse {
     public void setTotalResults(int totalResults) {
         this.totalResults = totalResults;
     }
-    public List<Article> getArticles() {
-        return articles;
+    public List<Article> getResults() {
+        return results;
     }
-    public void setArticles(List<Article> articles) {
-        this.articles = articles;
+    public void setResults(List<Article> results) {
+        this.results = results;
     }
 
     public static class Article {
-        private Source source;
-        private String author;
+        @JsonProperty("article_id")
+        private String articleId;
+        @JsonProperty("source_name")
+        private String sourceName;
         private String title;
         private String description;
-        private String url;
-        private String publishedAt; // parsare in LocalDateTime
+        @JsonProperty("link")
+        private String url; // Renamed from 'url' to 'link' in JSON, but keeping 'url' in Java for consistency with News model
+        @JsonProperty("pubDate")
+        private String publishedAt; // Renamed from 'publishedAt' to 'pubDate' in JSON, but keeping 'publishedAt' in Java for consistency with News model
+        @JsonProperty("image_url")
+        private String imageUrl;
 
-        // getter e setter
-        public Source getSource() {
-            return source;
+        // Getters and Setters
+        public String getArticleId() {
+            return articleId;
         }
-        public void setSource(Source source) {
-            this.source = source;
+
+        public void setArticleId(String articleId) {
+            this.articleId = articleId;
         }
-        public String getAuthor() {
-            return author;
+
+        public String getSourceName() {
+            return sourceName;
         }
-        public void setAuthor(String author) {
-            this.author = author;
+
+        public void setSourceName(String sourceName) {
+            this.sourceName = sourceName;
         }
+
         public String getTitle() {
             return title;
         }
+
         public void setTitle(String title) {
             this.title = title;
         }
+
         public String getDescription() {
             return description;
         }
+
         public void setDescription(String description) {
             this.description = description;
         }
+
         public String getUrl() {
             return url;
         }
+
         public void setUrl(String url) {
             this.url = url;
         }
+
         public String getPublishedAt() {
             return publishedAt;
         }
+
         public void setPublishedAt(String publishedAt) {
             this.publishedAt = publishedAt;
         }
 
-        public static class Source {
-            private String id;
-            private String name;
+        public String getImageUrl() {
+            return imageUrl;
+        }
 
-            // getter e setter
-            public String getId() {
-                return id;
-            }
-            public void setId(String id) {
-                this.id = id;
-            }
-            public String getName() {
-                return name;
-            }
-            public void setName(String name) {
-                this.name = name;
-            }
+        public void setImageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
         }
     }
 }
