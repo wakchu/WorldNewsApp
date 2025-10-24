@@ -10,15 +10,6 @@ class NewsViewModel: ObservableObject {
         self.newsService = newsService
     }
     
-    func loadTopHeadlines(for country: Country) async {
-        do {
-            let result = try await newsService.getTopHeadlines(for: country.code)
-            self.articles = result
-        } catch {
-            print("Errore caricamento notizie: \(error)")
-            self.articles = []
-        }
-    }
 
     func loadNews(for isoCode: String) async {
         do {
