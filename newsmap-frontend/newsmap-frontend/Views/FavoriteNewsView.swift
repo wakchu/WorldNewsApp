@@ -1,12 +1,25 @@
 import SwiftUI
 
 struct FavoriteNewsView: View {
+    @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel = FavoritesViewModel()
 
     var body: some View {
         NavigationStack {
             VStack {
                 AppHeaderView()
+                HStack {
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
+                        HStack {
+                            Image(systemName: "chevron.backward")
+                            Text("Back")
+                        }
+                    }
+                    .padding()
+                    Spacer()
+                }
                 
                 if viewModel.isLoading {
                     ProgressView()

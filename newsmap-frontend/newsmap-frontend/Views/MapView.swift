@@ -13,12 +13,9 @@ struct MapView: View {
                 ZStack {
                     MapViewControllerRepresentable(selectedCountry: $selectedCountry)
                         .edgesIgnoringSafeArea(.bottom)
-                    
-                    if let selectedCountry = selectedCountry {
-                        NavigationLink(destination: NewsListView(countryName: selectedCountry.country, isoCode: selectedCountry.alpha3), isActive: .constant(true)) {
-                            EmptyView()
-                        }
-                    }
+                }
+                .navigationDestination(item: $selectedCountry) { country in
+                    NewsListView(countryName: country.country, isoCode: country.alpha3)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -28,7 +25,6 @@ struct MapView: View {
     }
 }
 
-// MARK: - MapViewControllerRepresentable (SwiftUI Wrapper for UIKit's MKMapView)
 struct MapViewControllerRepresentable: UIViewRepresentable {
     @Binding var selectedCountry: CountryGeoData?
 
@@ -77,8 +73,15 @@ struct MapViewControllerRepresentable: UIViewRepresentable {
 
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
             if let annotation = view.annotation, let countryName = annotation.title, let country = countries.first(where: { $0.country == countryName }) {
+                // Deselect the annotation to ensure navigation re-triggers even if the same country is selected
+                mapView.deselectAnnotation(annotation, animated: false)
+                parent.selectedCountry = nil // Explicitly set to nil first
                 parent.selectedCountry = country
             }
+        }
+
+        func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+            parent.selectedCountry = nil
         }
 
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {

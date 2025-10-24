@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct NewsListView: View {
+    @Environment(\.presentationMode) var presentationMode
     let countryName: String
     let isoCode: String
     
@@ -9,6 +10,18 @@ struct NewsListView: View {
     var body: some View {
         VStack {
             AppHeaderView()
+            HStack {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    HStack {
+                        Image(systemName: "chevron.backward")
+                        Text("Back")
+                    }
+                }
+                .padding()
+                Spacer()
+            }
             Text("News from \(countryName)")
                 .font(.largeTitle)
                 .fontWeight(.bold)
