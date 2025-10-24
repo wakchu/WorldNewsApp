@@ -19,4 +19,14 @@ class NewsViewModel: ObservableObject {
             self.articles = []
         }
     }
+
+    func loadNews(for isoCode: String) async {
+        do {
+            let result = try await newsService.getNews(for: isoCode)
+            self.articles = result
+        } catch {
+            print("Errore caricamento notizie: \(error)")
+            self.articles = []
+        }
+    }
 }

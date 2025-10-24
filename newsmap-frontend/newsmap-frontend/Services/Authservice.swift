@@ -1,7 +1,12 @@
 import Foundation
 
 struct LoginRequest: Codable {
-    let email: String
+    let username: String
+    let password: String
+}
+
+struct RegisterRequest: Codable {
+    let username: String
     let password: String
 }
 
@@ -10,55 +15,18 @@ struct LoginResponse: Codable {
 }
 
 class AuthService {
-    private let baseURL = Bundle.main.object(forInfoDictionaryKey: "API_BASE_URL") as? String ?? ""
+    private let apiService = APIService()
     
-    func login(email: String, password: String) async throws -> Bool {
-        guard let url = URL(string: "\(baseURL)/auth/login") else {
-            throw URLError(.badURL)
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let body = LoginRequest(email: email, password: password)
-        request.httpBody = try JSONEncoder().encode(body)
-        
-        let (data, response) = try await URLSession.shared.data(for: request)
-        
-        guard let httpResponse = response as? HTTPURLResponse,
-              httpResponse.statusCode == 200 else {
-            return false
-        }
-        
-        let decoded = try JSONDecoder().decode(LoginResponse.self, from: data)
-        KeychainHelper.standard.save(decoded.token, service: "auth", account: "jwt")
-        
+    func login(username: String, password: String) async throws -> Bool {
+        let body = LoginRequest(username: username, password: password)
+        let response: LoginResponse = try await apiService.post(endpoint: "/api/auth/login", body: body)
+        KeychainHelper.standard.save(response.token, service: "auth", account: "jwt")
         return true
     }
     
-    func register(email: String, password: String) async throws -> Bool {
-        guard let url = URL(string: "\(baseURL)/auth/register") else {
-            throw URLError(.badURL)
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let body = LoginRequest(email: email, password: password)
-        request.httpBody = try JSONEncoder().encode(body)
-        
-        let (data, response) = try await URLSession.shared.data(for: request)
-        
-        guard let httpResponse = response as? HTTPURLResponse,
-              httpResponse.statusCode == 200 else {
-            return false
-        }
-        
-        let decoded = try JSONDecoder().decode(LoginResponse.self, from: data)
-        KeychainHelper.standard.save(decoded.token, service: "auth", account: "jwt")
-        
+    func register(username: String, password: String) async throws -> Bool {
+        let body = RegisterRequest(username: username, password: password)
+        try await apiService.postEmpty(endpoint: "/api/auth/register", body: body)
         return true
     }
 }

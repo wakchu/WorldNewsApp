@@ -1,6 +1,9 @@
 import Foundation
 
 struct User: Identifiable, Codable, Equatable {
-    var id: UUID = UUID()
-    var email: String = ""
+    let id: Int
+    let username: String
+    let email: String?
+    let favoriteCountries: [Country]
+    let favoriteNews: [News]
 }

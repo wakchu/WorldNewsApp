@@ -3,7 +3,7 @@ import Combine
 
 @MainActor
 class AuthViewModel: ObservableObject {
-    @Published var email: String = ""
+    @Published var username: String = ""
     @Published var password: String = ""
     @Published var confirmPassword: String = ""
     @Published var isLoading: Bool = false
@@ -13,8 +13,8 @@ class AuthViewModel: ObservableObject {
     private let authService = AuthService()
     
     func login() async {
-        guard !email.isEmpty, !password.isEmpty else {
-            errorMessage = "Inserisci email e password"
+        guard !username.isEmpty, !password.isEmpty else {
+            errorMessage = "Inserisci username e password"
             return
         }
         
@@ -22,7 +22,7 @@ class AuthViewModel: ObservableObject {
         errorMessage = nil
         
         do {
-            let success = try await authService.login(email: email, password: password)
+            let success = try await authService.login(username: username, password: password)
             if success {
                 isLoggedIn = true
             } else {
@@ -36,8 +36,8 @@ class AuthViewModel: ObservableObject {
     }
     
     func register(confirmPassword: String) async {
-        guard !email.isEmpty, !password.isEmpty, !confirmPassword.isEmpty else {
-            errorMessage = "Inserisci email, password e conferma password"
+        guard !username.isEmpty, !password.isEmpty, !confirmPassword.isEmpty else {
+            errorMessage = "Inserisci username, password e conferma password"
             return
         }
         
@@ -50,9 +50,10 @@ class AuthViewModel: ObservableObject {
         errorMessage = nil
         
         do {
-            let success = try await authService.register(email: email, password: password)
+            let success = try await authService.register(username: username, password: password)
             if success {
-                isLoggedIn = true
+                // Directly login after successful registration
+                await login()
             } else {
                 errorMessage = "Registrazione fallita"
             }

@@ -1,19 +1,39 @@
 import SwiftUI
 
 struct FavoriteNationsView: View {
+    @StateObject private var viewModel = FavoritesViewModel()
+
     var body: some View {
         NavigationStack {
             VStack {
                 AppHeaderView()
-                Text("Hello World - Favorite Nations")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .padding()
                 
-                Spacer()
+                if viewModel.isLoading {
+                    ProgressView()
+                } else if let user = viewModel.user {
+                    List(user.favoriteCountries) { country in
+                        HStack {
+                            Text(country.name)
+                            Spacer()
+                            Button(action: {
+                                Task {
+                                    await viewModel.removeFavoriteCountry(isoCode: country.isoCode)
+                                }
+                            }) {
+                                Image(systemName: "trash")
+                                    .foregroundColor(.red)
+                            }
+                        }
+                    }
+                } else {
+                    Text("No favorite countries found.")
+                }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.systemBackground))
+            .onAppear {
+                Task {
+                    await viewModel.getMyProfile()
+                }
+            }
             .navigationBarHidden(true)
         }
     }

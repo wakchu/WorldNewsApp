@@ -20,6 +20,10 @@ class NewsService {
         let queryItems = [URLQueryItem(name: "country", value: countryCode)]
         return try await api.get(endpoint: "/news", queryItems: queryItems, token: token)
     }
+
+    func getNews(for isoCode: String, token: String? = nil) async throws -> [NewsArticleResponse] {
+        return try await api.get(endpoint: "/api/news/by-country/\(isoCode)", token: token)
+    }
     
     // Dettaglio articolo singolo
     func getArticle(by id: Int, token: String? = nil) async throws -> NewsArticleResponse {
