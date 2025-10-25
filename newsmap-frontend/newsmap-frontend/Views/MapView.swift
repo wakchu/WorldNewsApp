@@ -4,86 +4,96 @@ import CoreLocation
 
 // MARK: - MapView (SwiftUI)
 struct MapView: View {
+    @State private var selectedCountry: CountryGeoData? = nil
+
     var body: some View {
         NavigationStack {
             VStack {
                 AppHeaderView()
-                // Embed the MapViewControllerRepresentable to display the MapKit map
-                MapViewControllerRepresentable()
-                    .edgesIgnoringSafeArea(.bottom) // Extend map to the bottom edge
+                ZStack {
+                    MapViewControllerRepresentable(selectedCountry: $selectedCountry)
+                        .edgesIgnoringSafeArea(.bottom)
+                }
+                .navigationDestination(item: $selectedCountry) { country in
+                    NewsListView(countryName: country.country, isoCode: country.alpha3)
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(.systemBackground))
-            .navigationBarHidden(true) // Hide the default navigation bar
+            .navigationBarHidden(true)
         }
     }
 }
 
-// MARK: - MapViewControllerRepresentable (SwiftUI Wrapper for UIKit's MKMapView)
 struct MapViewControllerRepresentable: UIViewRepresentable {
+    @Binding var selectedCountry: CountryGeoData?
+
     func makeUIView(context: Context) -> MKMapView {
-        // Create and configure the MKMapView
         let mapView = MKMapView()
-        mapView.delegate = context.coordinator // Set the coordinator as the delegate
-        context.coordinator.mapView = mapView // Pass the map view to the coordinator
-        context.coordinator.loadAndDisplayCountries() // Load and display countries immediately
+        mapView.delegate = context.coordinator
+        context.coordinator.mapView = mapView
+        context.coordinator.loadAndDisplayCountries()
         return mapView
     }
 
     func updateUIView(_ uiView: MKMapView, context: Context) {
-        // Update the map view if needed (e.g., when data changes)
-        // For now, we load annotations once in the coordinator's makeUIView
     }
 
     func makeCoordinator() -> Coordinator {
-        // Create the coordinator to handle MKMapViewDelegate methods
         Coordinator(self)
     }
 
     // MARK: - Coordinator (MKMapViewDelegate)
-    class Coordinator: NSObject, MKMapViewDelegate {
-        var parent: MapViewControllerRepresentable
-        var mapView: MKMapView? // Reference to the MKMapView
-        private let countryService = CountryService() // Initialize CountryService
-
-        init(_ parent: MapViewControllerRepresentable) {
-            self.parent = parent
-            super.init()
-        }
-
-        /// Loads country data from the JSON file and adds annotations to the map.
-        func loadAndDisplayCountries() {
-            guard let mapView = mapView else { return } // Ensure mapView is available
-            do {
-                let countries = try countryService.loadCountriesGeoData()
-                let annotations = countries.map { countryGeoData -> MKPointAnnotation in
-                    let annotation = MKPointAnnotation()
-                    annotation.title = countryGeoData.country
-                    annotation.coordinate = countryGeoData.coordinate
-                    return annotation
+            class Coordinator: NSObject, MKMapViewDelegate {
+                var parent: MapViewControllerRepresentable
+                var mapView: MKMapView?
+                private let countryService = CountryService()
+                private let newsService = NewsService()
+                private var countries: [CountryGeoData] = []
+    
+                init(_ parent: MapViewControllerRepresentable) {
+                    self.parent = parent
+                    super.init()
                 }
-                // Add all created annotations to the map
-                mapView.addAnnotations(annotations)
-            } catch {
-                print("Error loading country data: \(error.localizedDescription)")
-                // Handle error, e.g., show an alert to the user
-            }
+    
+                func loadAndDisplayCountries() {
+                    guard let mapView = mapView else { return }
+                    do {
+                        countries = try countryService.loadCountriesGeoData()
+                        let annotations = countries.map { countryGeoData -> MKPointAnnotation in
+                            let annotation = MKPointAnnotation()
+                            annotation.title = countryGeoData.country
+                            annotation.coordinate = countryGeoData.coordinate
+                            return annotation
+                        }
+                        mapView.addAnnotations(annotations)
+                    } catch {
+                        print("Error loading country data: \(error.localizedDescription)")
+                    }
+                }
+    
+                func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+                    if let annotation = view.annotation, let countryName = annotation.title, let country = countries.first(where: { $0.country == countryName }) {
+                        // Deselect the annotation to ensure navigation re-triggers even if the same country is selected
+                        mapView.deselectAnnotation(annotation, animated: false)
+                        
+                        Task {
+                            do {
+                                let token = KeychainHelper.standard.read(service: "auth", account: "jwt")
+                                try await newsService.fetchNews(for: country.alpha3, token: token)
+                                parent.selectedCountry = nil // Explicitly set to nil first
+                                parent.selectedCountry = country
+                            } catch {
+                                print("Error fetching news: \(error.localizedDescription)")
+                            }
+                        }
+                    }
+                }
+        func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+            parent.selectedCountry = nil
         }
 
-        // MARK: MKMapViewDelegate Methods
-
-        /// Called when an annotation is selected on the map.
-        func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-            if let annotation = view.annotation, let countryName = annotation.title {
-                print("Selected country: \(countryName ?? "Unknown")")
-                // Optionally, show a callout for the annotation
-                mapView.selectAnnotation(annotation, animated: true)
-            }
-        }
-
-        /// Provides a custom view for each annotation.
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-            // Use the default MKPinAnnotationView for now
             guard annotation is MKPointAnnotation else { return nil }
 
             let identifier = "CountryAnnotation"
@@ -91,7 +101,7 @@ struct MapViewControllerRepresentable: UIViewRepresentable {
 
             if annotationView == nil {
                 annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-                annotationView?.canShowCallout = true // Enable callout to show title
+                annotationView?.canShowCallout = true
             } else {
                 annotationView?.annotation = annotation
             }

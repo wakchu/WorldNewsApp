@@ -1,10 +1,23 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @Environment(\.presentationMode) var presentationMode
     var body: some View {
         NavigationStack {
             VStack {
                 AppHeaderView()
+                HStack {
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
+                        HStack {
+                            Image(systemName: "chevron.backward")
+                            Text("Back")
+                        }
+                    }
+                    .padding()
+                    Spacer()
+                }
                 Text("Hello World - Settings")
                     .font(.largeTitle)
                     .fontWeight(.bold)

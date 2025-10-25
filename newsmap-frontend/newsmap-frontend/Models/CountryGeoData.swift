@@ -4,7 +4,7 @@ import CoreLocation
 
 // MARK: - CountryGeoData
 // Struct to decode individual country data from the JSON file.
-struct CountryGeoData: Codable, Identifiable {
+struct CountryGeoData: Codable, Identifiable, Hashable {
     let id = UUID() // Conforming to Identifiable for use in ForEach or lists
     let country: String
     let alpha2: String

@@ -1,74 +1,87 @@
 import SwiftUI
 import Combine
 
-struct FavoriteCountryResponse: Decodable {
-    let code: String
-    let name: String
-    let latitude: Double
-    let longitude: Double
-}
-
-struct FavoriteArticleResponse: Decodable {
-    let id: Int
-    let title: String
-    let description: String?
-    let url: String
-    let imageUrl: String?
-    let publishedAt: String
-    let sourceName: String
-}
-
 @MainActor
 class FavoritesViewModel: ObservableObject {
-    @Published var favoriteCountries: [FavoriteCountryResponse] = []
-    @Published var favoriteArticles: [FavoriteArticleResponse] = []
-    
-    private let apiService: APIService
-    
-    init(apiService: APIService = APIService()) {
-        self.apiService = apiService
-    }
-    
-    // MARK: - Carica i paesi preferiti dell'utente
-    func loadFavoriteCountries(token: String) async {
+    @Published var user: User?
+    @Published var isLoading: Bool = false
+    @Published var errorMessage: String?
+
+    private let userService = UserService()
+    private let authService = AuthService()
+
+    func getMyProfile() async {
+        isLoading = true
+        errorMessage = nil
+
         do {
-            let countries: [FavoriteCountryResponse] = try await apiService.get(endpoint: "/users/me/favorites/countries", token: token)
-            self.favoriteCountries = countries
+            guard let token = KeychainHelper.standard.read(service: "auth", account: "jwt") else {
+                errorMessage = "User not logged in"
+                isLoading = false
+                return
+            }
+            let user = try await userService.getMyProfile(token: token)
+            self.user = user
         } catch {
-            print("Errore caricamento paesi preferiti: \(error)")
-            self.favoriteCountries = []
+            errorMessage = "Error fetching profile: \(error.localizedDescription)"
+        }
+
+        isLoading = false
+    }
+
+    func addFavoriteCountry(isoCode: String) async {
+        guard let token = KeychainHelper.standard.read(service: "auth", account: "jwt") else {
+            errorMessage = "User not logged in"
+            return
+        }
+
+        do {
+            try await userService.addFavoriteCountry(isoCode: isoCode, token: token)
+            await getMyProfile()
+        } catch {
+            errorMessage = "Error adding favorite country: \(error.localizedDescription)"
         }
     }
-    
-    // MARK: - Carica gli articoli preferiti dell'utente
-    func loadFavoriteArticles(token: String) async {
+
+    func removeFavoriteCountry(isoCode: String) async {
+        guard let token = KeychainHelper.standard.read(service: "auth", account: "jwt") else {
+            errorMessage = "User not logged in"
+            return
+        }
+
         do {
-            let articles: [FavoriteArticleResponse] = try await apiService.get(endpoint: "/users/me/favorites/articles", token: token)
-            self.favoriteArticles = articles
+            try await userService.removeFavoriteCountry(isoCode: isoCode, token: token)
+            await getMyProfile()
         } catch {
-            print("Errore caricamento articoli preferiti: \(error)")
-            self.favoriteArticles = []
+            errorMessage = "Error removing favorite country: \(error.localizedDescription)"
         }
     }
-    
-    // MARK: - Aggiungi o rimuovi un paese preferito
-    func toggleFavoriteCountry(_ countryCode: String, token: String) async {
+
+    func addFavoriteNews(newsId: Int) async {
+        guard let token = KeychainHelper.standard.read(service: "auth", account: "jwt") else {
+            errorMessage = "User not logged in"
+            return
+        }
+
         do {
-            // Chiama PUT per aggiungere/rimuovere
-            let _: [FavoriteCountryResponse] = try await apiService.put(endpoint: "/users/me/favorites/countries", body: ["countryCode": countryCode], token: token)
-            await loadFavoriteCountries(token: token)
+            try await userService.addFavoriteNews(newsId: newsId, token: token)
+            await getMyProfile()
         } catch {
-            print("Errore toggle paese preferito: \(error)")
+            errorMessage = "Error adding favorite news: \(error.localizedDescription)"
         }
     }
-    
-    // MARK: - Aggiungi o rimuovi un articolo preferito
-    func toggleFavoriteArticle(_ articleId: Int, token: String) async {
+
+    func removeFavoriteNews(newsId: Int) async {
+        guard let token = KeychainHelper.standard.read(service: "auth", account: "jwt") else {
+            errorMessage = "User not logged in"
+            return
+        }
+
         do {
-            let _: [FavoriteArticleResponse] = try await apiService.put(endpoint: "/users/me/favorites/articles", body: ["articleId": articleId], token: token)
-            await loadFavoriteArticles(token: token)
+            try await userService.removeFavoriteNews(newsId: newsId, token: token)
+            await getMyProfile()
         } catch {
-            print("Errore toggle articolo preferito: \(error)")
+            errorMessage = "Error removing favorite news: \(error.localizedDescription)"
         }
     }
 }

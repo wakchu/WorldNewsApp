@@ -1,19 +1,52 @@
 import SwiftUI
 
 struct FavoriteNationsView: View {
+    @Environment(\.presentationMode) var presentationMode
+    @StateObject private var viewModel = FavoritesViewModel()
+
     var body: some View {
         NavigationStack {
             VStack {
                 AppHeaderView()
-                Text("Hello World - Favorite Nations")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
+                HStack {
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
+                        HStack {
+                            Image(systemName: "chevron.backward")
+                            Text("Back")
+                        }
+                    }
                     .padding()
+                    Spacer()
+                }
                 
-                Spacer()
+                if viewModel.isLoading {
+                    ProgressView()
+                } else if let user = viewModel.user {
+                    List(user.favoriteCountries) { country in
+                        HStack {
+                            Text(country.name)
+                            Spacer()
+                            Button(action: {
+                                Task {
+                                    await viewModel.removeFavoriteCountry(isoCode: country.isoCode)
+                                }
+                            }) {
+                                Image(systemName: "trash")
+                                    .foregroundColor(.red)
+                            }
+                        }
+                    }
+                } else {
+                    Text("No favorite countries found.")
+                }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.systemBackground))
+            .onAppear {
+                Task {
+                    await viewModel.getMyProfile()
+                }
+            }
             .navigationBarHidden(true)
         }
     }

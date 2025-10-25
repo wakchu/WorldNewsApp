@@ -12,6 +12,9 @@ struct AppHeaderView: View {
             Spacer()
 
             Menu {
+                NavigationLink(destination: MapView()) {
+                    Label("Home", systemImage: "house.fill")
+                }
                 NavigationLink(destination: SettingsView()) {
                     Label("Settings", systemImage: "gear")
                 }

@@ -42,12 +42,7 @@ private struct RootView: View {
                         Label("Mappa", systemImage: "map")
                     }
                     
-                    NavigationStack {
-                        NewsListView()
-                    }
-                    .tabItem {
-                        Label("Notizie", systemImage: "newspaper")
-                    }
+
                     
                     NavigationStack {
                         FavoritesView()
@@ -67,11 +62,10 @@ private struct RootView: View {
                 }
             }
         }
+        .id(authVM.isLoggedIn) // Add this line
         .task(id: mapVM.selectedCountry?.code) {
             if let countryResponse = mapVM.selectedCountry {
-                // Map CountryResponse to Country expected by NewsViewModel
-                let country = Country(name: countryResponse.name, code: countryResponse.code)
-                await newsVM.loadTopHeadlines(for: country)
+                await newsVM.loadNews(for: countryResponse.code)
             }
         }
     }
