@@ -62,6 +62,7 @@ private struct RootView: View {
                 }
             }
         }
+        .id(authVM.isLoggedIn) // Add this line
         .task(id: mapVM.selectedCountry?.code) {
             if let countryResponse = mapVM.selectedCountry {
                 await newsVM.loadNews(for: countryResponse.code)

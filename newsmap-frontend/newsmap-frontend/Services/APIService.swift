@@ -29,7 +29,10 @@ class APIService {
     
     // MARK: - Generic POST
     func post<T: Decodable, U: Encodable>(endpoint: String, body: U, token: String? = nil) async throws -> T {
+        print("APIService: post called for endpoint: \(endpoint)")
+        print("APIService: baseURL is: \(baseURL)")
         guard let url = URL(string: baseURL + endpoint) else {
+            print("APIService: Error - Bad URL for endpoint: \(baseURL + endpoint)")
             throw URLError(.badURL)
         }
         
@@ -41,9 +44,23 @@ class APIService {
         }
         request.httpBody = try JSONEncoder().encode(body)
         
+        print("APIService: Making network request to: \(url.absoluteString)")
         let (data, response) = try await URLSession.shared.data(for: request)
-        try validateResponse(response)
-        return try JSONDecoder().decode(T.self, from: data)
+        print("APIService: Network request completed.")
+        
+        if let httpResponse = response as? HTTPURLResponse {
+            print("APIService: HTTP Status Code: \(httpResponse.statusCode)")
+        }
+
+        do {
+            try validateResponse(response)
+            let decodedData = try JSONDecoder().decode(T.self, from: data)
+            print("APIService: Data decoded successfully.")
+            return decodedData
+        } catch {
+            print("APIService: Error during post or decoding: \(error.localizedDescription)")
+            throw error
+        }
     }
 
     func postEmpty<U: Encodable>(endpoint: String, body: U, token: String? = nil) async throws {

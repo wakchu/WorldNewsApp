@@ -24,6 +24,10 @@ class NewsService {
     func getNews(for isoCode: String, token: String? = nil) async throws -> [NewsArticleResponse] {
         return try await api.get(endpoint: "/api/news/by-country/\(isoCode)", token: token)
     }
+
+    func fetchNews(for isoCode: String, token: String? = nil) async throws {
+        try await api.postEmpty(endpoint: "/api/fetch-news/\(isoCode)", token: token)
+    }
     
     // Dettaglio articolo singolo
     func getArticle(by id: Int, token: String? = nil) async throws -> NewsArticleResponse {

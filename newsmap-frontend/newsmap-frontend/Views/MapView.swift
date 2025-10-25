@@ -44,42 +44,51 @@ struct MapViewControllerRepresentable: UIViewRepresentable {
     }
 
     // MARK: - Coordinator (MKMapViewDelegate)
-    class Coordinator: NSObject, MKMapViewDelegate {
-        var parent: MapViewControllerRepresentable
-        var mapView: MKMapView?
-        private let countryService = CountryService()
-        private var countries: [CountryGeoData] = []
-
-        init(_ parent: MapViewControllerRepresentable) {
-            self.parent = parent
-            super.init()
-        }
-
-        func loadAndDisplayCountries() {
-            guard let mapView = mapView else { return }
-            do {
-                countries = try countryService.loadCountriesGeoData()
-                let annotations = countries.map { countryGeoData -> MKPointAnnotation in
-                    let annotation = MKPointAnnotation()
-                    annotation.title = countryGeoData.country
-                    annotation.coordinate = countryGeoData.coordinate
-                    return annotation
+            class Coordinator: NSObject, MKMapViewDelegate {
+                var parent: MapViewControllerRepresentable
+                var mapView: MKMapView?
+                private let countryService = CountryService()
+                private let newsService = NewsService()
+                private var countries: [CountryGeoData] = []
+    
+                init(_ parent: MapViewControllerRepresentable) {
+                    self.parent = parent
+                    super.init()
                 }
-                mapView.addAnnotations(annotations)
-            } catch {
-                print("Error loading country data: \(error.localizedDescription)")
-            }
-        }
-
-        func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-            if let annotation = view.annotation, let countryName = annotation.title, let country = countries.first(where: { $0.country == countryName }) {
-                // Deselect the annotation to ensure navigation re-triggers even if the same country is selected
-                mapView.deselectAnnotation(annotation, animated: false)
-                parent.selectedCountry = nil // Explicitly set to nil first
-                parent.selectedCountry = country
-            }
-        }
-
+    
+                func loadAndDisplayCountries() {
+                    guard let mapView = mapView else { return }
+                    do {
+                        countries = try countryService.loadCountriesGeoData()
+                        let annotations = countries.map { countryGeoData -> MKPointAnnotation in
+                            let annotation = MKPointAnnotation()
+                            annotation.title = countryGeoData.country
+                            annotation.coordinate = countryGeoData.coordinate
+                            return annotation
+                        }
+                        mapView.addAnnotations(annotations)
+                    } catch {
+                        print("Error loading country data: \(error.localizedDescription)")
+                    }
+                }
+    
+                func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+                    if let annotation = view.annotation, let countryName = annotation.title, let country = countries.first(where: { $0.country == countryName }) {
+                        // Deselect the annotation to ensure navigation re-triggers even if the same country is selected
+                        mapView.deselectAnnotation(annotation, animated: false)
+                        
+                        Task {
+                            do {
+                                let token = KeychainHelper.standard.read(service: "auth", account: "jwt")
+                                try await newsService.fetchNews(for: country.alpha3, token: token)
+                                parent.selectedCountry = nil // Explicitly set to nil first
+                                parent.selectedCountry = country
+                            } catch {
+                                print("Error fetching news: \(error.localizedDescription)")
+                            }
+                        }
+                    }
+                }
         func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
             parent.selectedCountry = nil
         }
