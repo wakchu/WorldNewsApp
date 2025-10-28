@@ -38,25 +38,7 @@ private struct RootView: View {
             if authVM.isLoggedIn {
                 VStack(spacing: 0) {
                     AppHeaderView(selectedTab: $selectedTab, showingSettings: $showingSettings)
-                    TabView(selection: $selectedTab) {
-                        NavigationStack {
-                            MapView()
-                        }
-                        .tag(0)
-                        .tabItem {
-                            Label("Map", systemImage: "map")
-                        }
-                        
-
-                        
-                        NavigationStack {
-                            FavoritesView()
-                        }
-                        .tag(1)
-                        .tabItem {
-                            Label("Favorites", systemImage: "star")
-                        }
-                    }
+                                        AppTabBarView(selectedTab: $selectedTab)
                 }
                 .sheet(isPresented: $showingSettings) {
                     NavigationStack {
