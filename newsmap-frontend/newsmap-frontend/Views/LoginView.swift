@@ -35,7 +35,7 @@ struct LoginView: View {
                 } label: {
                     if viewModel.isLoading {
                         ProgressView()
-                            .tint(.white)
+                            .tint(.primary)
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.accentColor)
@@ -43,7 +43,7 @@ struct LoginView: View {
                     } else {
                         Text("Accedi")
                             .fontWeight(.semibold)
-                            .foregroundColor(.white)
+                            .foregroundColor(.primary)
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.accentColor)

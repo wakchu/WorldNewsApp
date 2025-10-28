@@ -30,6 +30,7 @@ private struct RootView: View {
     @EnvironmentObject private var authVM: AuthViewModel
     @EnvironmentObject private var mapVM: MapViewModel
     @EnvironmentObject private var newsVM: NewsViewModel
+    @AppStorage("isDarkMode") private var isDarkMode = false
     @State private var selectedTab: Int = 0 // 0 for Map, 1 for Favorites
     @State private var showingSettings: Bool = false
     
@@ -38,7 +39,7 @@ private struct RootView: View {
             if authVM.isLoggedIn {
                 VStack(spacing: 0) {
                     AppHeaderView(selectedTab: $selectedTab, showingSettings: $showingSettings)
-                                        AppTabBarView(selectedTab: $selectedTab)
+                    AppTabBarView(selectedTab: $selectedTab)
                 }
                 .sheet(isPresented: $showingSettings) {
                     NavigationStack {
@@ -63,5 +64,6 @@ private struct RootView: View {
                 await newsVM.loadNews(for: countryResponse.code, token: token)
             }
         }
+        .preferredColorScheme(isDarkMode ? .dark : .light)
     }
 }

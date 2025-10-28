@@ -38,7 +38,7 @@ struct RegisterView: View {
             } label: {
                 if viewModel.isLoading {
                     ProgressView()
-                        .tint(.white)
+                        .tint(.primary)
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(Color.accentColor)
@@ -46,7 +46,7 @@ struct RegisterView: View {
                 } else {
                     Text("Registrati")
                         .fontWeight(.semibold)
-                        .foregroundColor(.white)
+                        .foregroundColor(.primary)
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(Color.accentColor)

@@ -2,13 +2,15 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(\.presentationMode) var presentationMode
+    @AppStorage("isDarkMode") private var isDarkMode = false
+
     var body: some View {
         VStack {
-            Text("Hello World - Settings")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding()
-            
+            Toggle(isOn: $isDarkMode) {
+                Text("Dark Mode")
+            }
+            .padding()
+
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -19,8 +21,7 @@ struct SettingsView: View {
                 Button(action: {
                     presentationMode.wrappedValue.dismiss()
                 }) {
-                    Image(systemName: "chevron.left")
-                    Text("Back")
+                    Image(systemName: "xmark.circle.fill")
                 }
             }
         }
