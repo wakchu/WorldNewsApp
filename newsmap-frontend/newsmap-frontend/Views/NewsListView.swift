@@ -2,43 +2,44 @@ import SwiftUI
 
 struct NewsListView: View {
     @Environment(\.presentationMode) var presentationMode
-    let countryName: String
-    let isoCode: String
-    
-    @StateObject private var viewModel = NewsViewModel()
+    @ObservedObject var newsViewModel: NewsViewModel
+    let countryCode: String
     
     var body: some View {
         VStack {
-            AppHeaderView()
             HStack {
+                Spacer()
                 Button(action: {
                     presentationMode.wrappedValue.dismiss()
                 }) {
-                    HStack {
-                        Image(systemName: "chevron.backward")
-                        Text("Back")
-                    }
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.largeTitle)
+                        .foregroundColor(.gray)
                 }
                 .padding()
-                Spacer()
             }
-            Text("News from \(countryName)")
+            Text("News from \(countryCode)")
                 .font(.largeTitle)
                 .fontWeight(.bold)
                 .padding()
             
-            List(viewModel.articles, id: \.id) { article in
-                VStack(alignment: .leading) {
-                    Text(article.title)
-                        .font(.headline)
-                    Text(article.description ?? "")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
-            }
-            .onAppear {
-                Task {
-                    await viewModel.loadNews(for: isoCode)
+            if newsViewModel.isLoading {
+                ProgressView()
+                Spacer()
+            } else if newsViewModel.articles.isEmpty {
+                Text("Non ci sono notizie disponibili per \(countryCode)")
+                    .font(.headline)
+                    .padding()
+                Spacer()
+            } else {
+                List(newsViewModel.articles, id: \.id) { article in
+                    VStack(alignment: .leading) {
+                        Text(article.title)
+                            .font(.headline)
+                        Text(article.description ?? "")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
                 }
             }
         }
@@ -48,6 +49,6 @@ struct NewsListView: View {
 
 struct NewsListView_Previews: PreviewProvider {
     static var previews: some View {
-        NewsListView(countryName: "United States", isoCode: "us")
+        NewsListView(newsViewModel: NewsViewModel(), countryCode: "us")
     }
 }

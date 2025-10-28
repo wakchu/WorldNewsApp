@@ -5,28 +5,24 @@ import CoreLocation
 // MARK: - MapView (SwiftUI)
 struct MapView: View {
     @State private var selectedCountry: CountryGeoData? = nil
+    @State private var showingNews: Bool = false
+    @StateObject var newsViewModel = NewsViewModel()
 
     var body: some View {
-        NavigationStack {
-            VStack {
-                AppHeaderView()
-                ZStack {
-                    MapViewControllerRepresentable(selectedCountry: $selectedCountry)
-                        .edgesIgnoringSafeArea(.bottom)
-                }
-                .navigationDestination(item: $selectedCountry) { country in
-                    NewsListView(countryName: country.country, isoCode: country.alpha3)
+        MapViewControllerRepresentable(selectedCountry: $selectedCountry, showingNews: $showingNews, newsViewModel: newsViewModel)
+            .edgesIgnoringSafeArea(.all)
+            .sheet(isPresented: $showingNews) {
+                if let country = selectedCountry {
+                    NewsListView(newsViewModel: newsViewModel, countryCode: country.alpha2)
                 }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.systemBackground))
-            .navigationBarHidden(true)
-        }
     }
 }
 
 struct MapViewControllerRepresentable: UIViewRepresentable {
     @Binding var selectedCountry: CountryGeoData?
+    @Binding var showingNews: Bool
+    var newsViewModel: NewsViewModel
 
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
@@ -80,11 +76,17 @@ struct MapViewControllerRepresentable: UIViewRepresentable {
                         Task {
                             do {
                                 let token = KeychainHelper.standard.read(service: "auth", account: "jwt")
-                                try await newsService.fetchNews(for: country.alpha3, token: token)
-                                parent.selectedCountry = nil // Explicitly set to nil first
+                                print("Token: \(token ?? "nil")")
+                                print("Calling fetchNews for country \(country.alpha2)")
+                                try await newsService.fetchNews(for: country.alpha2, token: token)
+                                print("fetchNews call completed in MapView.")
+                                await parent.newsViewModel.loadNews(for: country.alpha2, token: token)
                                 parent.selectedCountry = country
+                                print("selectedCountry: \(parent.selectedCountry?.country ?? "nil"), showingNews before update: \(parent.showingNews)")
+                                parent.showingNews = true
+                                print("showingNews after update: \(parent.showingNews)")
                             } catch {
-                                print("Error fetching news: \(error.localizedDescription)")
+                                print("Error in fetchNews: \(error.localizedDescription)")
                             }
                         }
                     }
@@ -110,7 +112,6 @@ struct MapViewControllerRepresentable: UIViewRepresentable {
     }
 }
 
-// MARK: - MapView_Previews
 struct MapView_Previews: PreviewProvider {
     static var previews: some View {
         MapView()

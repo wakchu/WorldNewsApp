@@ -2,6 +2,7 @@ import SwiftUI
 
 struct LoginView: View {
     @EnvironmentObject private var viewModel: AuthViewModel
+    @State private var showRegisterView = false
     
     var body: some View {
         NavigationView {
@@ -52,14 +53,19 @@ struct LoginView: View {
                 .padding(.horizontal)
                 .disabled(viewModel.isLoading)
                 
-                NavigationLink("Registrati", destination: RegisterView())
-                    .font(.footnote)
-                    .padding(.top, 8)
+                Button("Registrati") {
+                    showRegisterView.toggle()
+                }
+                .font(.footnote)
+                .padding(.top, 8)
                 
                 Spacer()
             }
             .padding()
             .navigationBarHidden(true)
+            .sheet(isPresented: $showRegisterView) {
+                RegisterView()
+            }
         }
     }
 }

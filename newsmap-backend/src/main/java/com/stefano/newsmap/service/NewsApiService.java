@@ -53,18 +53,24 @@ public class NewsApiService {
     @Transactional
     public void fetchAndSaveNews(String countryCode) {
         try {
-
+            logger.info("Fetching news for country: {}", countryCode);
 
             NewsApiResponse newsApiResponse = restClient.get()
                     .uri(apiUrl + "?country={country}&apikey={apiKey}", countryCode.toLowerCase(), apiKey)
                     .retrieve()
                     .body(NewsApiResponse.class);
 
-            if (newsApiResponse == null || newsApiResponse.getResults() == null || newsApiResponse.getResults().isEmpty()) {
-                throw new IllegalStateException("No news articles received from the API.");
+            if (newsApiResponse == null) {
+                logger.warn("No response from news API for country: {}", countryCode);
+                return;
             }
 
-            logger.info("Received {} articles from the API.", newsApiResponse.getResults().size());
+            if (newsApiResponse.getResults() == null || newsApiResponse.getResults().isEmpty()) {
+                logger.info("No news articles received from the API for country: {}", countryCode);
+                return;
+            }
+
+            logger.info("Received {} articles from the API for country: {}", newsApiResponse.getResults().size(), countryCode);
 
             for (NewsApiResponse.Article article : newsApiResponse.getResults()) {
                 // Source
@@ -77,17 +83,21 @@ public class NewsApiService {
 
                 // Country
                 Country country = countryRepository.findById(countryCode.toUpperCase())
-                        .orElseThrow(() -> new IllegalArgumentException("Country with code \'" + countryCode.toUpperCase() + "\' not found in the database."));
+                        .orElseThrow(() -> new IllegalArgumentException("Country with code '" + countryCode.toUpperCase() + "' not found in the database."));
 
                 Set<Country> countries = new HashSet<>();
                 countries.add(country);
 
-                // Convert publishedAt in LocalDateTime
-                LocalDateTime publishedAt = null;
-                if (article.getPublishedAt() != null) {
-                    publishedAt = LocalDateTime.parse(article.getPublishedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                }
-
+                                    // Convert publishedAt in LocalDateTime
+                                    LocalDateTime publishedAt = null;
+                                    if (article.getPublishedAt() != null) {
+                                        try {
+                                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                                            publishedAt = LocalDateTime.parse(article.getPublishedAt(), formatter);
+                                        } catch (Exception e) {
+                                            logger.error("Error parsing date: {}", article.getPublishedAt(), e);
+                                        }
+                                    }
                 // News
                 News news = new News();
                 news.setTitle(article.getTitle());
@@ -100,8 +110,10 @@ public class NewsApiService {
 
                 newsRepository.save(news);
             }
+            logger.info("Finished fetching and saving news for country: {}", countryCode);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error fetching news for country: {}", countryCode, e);
         }
     }
 }
+
