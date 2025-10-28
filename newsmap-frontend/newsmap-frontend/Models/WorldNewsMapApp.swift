@@ -30,25 +30,37 @@ private struct RootView: View {
     @EnvironmentObject private var authVM: AuthViewModel
     @EnvironmentObject private var mapVM: MapViewModel
     @EnvironmentObject private var newsVM: NewsViewModel
+    @State private var selectedTab: Int = 0 // 0 for Map, 1 for Favorites
+    @State private var showingSettings: Bool = false
     
     var body: some View {
         Group {
             if authVM.isLoggedIn {
-                TabView {
-                    NavigationStack {
-                        MapView()
-                    }
-                    .tabItem {
-                        Label("Mappa", systemImage: "map")
-                    }
-                    
+                VStack(spacing: 0) {
+                    AppHeaderView(selectedTab: $selectedTab, showingSettings: $showingSettings)
+                    TabView(selection: $selectedTab) {
+                        NavigationStack {
+                            MapView()
+                        }
+                        .tag(0)
+                        .tabItem {
+                            Label("Map", systemImage: "map")
+                        }
+                        
 
-                    
-                    NavigationStack {
-                        FavoritesView()
+                        
+                        NavigationStack {
+                            FavoritesView()
+                        }
+                        .tag(1)
+                        .tabItem {
+                            Label("Favorites", systemImage: "star")
+                        }
                     }
-                    .tabItem {
-                        Label("Preferiti", systemImage: "star")
+                }
+                .sheet(isPresented: $showingSettings) {
+                    NavigationStack {
+                        SettingsView()
                     }
                 }
                 .task {

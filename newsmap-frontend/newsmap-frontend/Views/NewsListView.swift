@@ -33,12 +33,14 @@ struct NewsListView: View {
                 Spacer()
             } else {
                 List(newsViewModel.articles, id: \.id) { article in
-                    VStack(alignment: .leading) {
-                        Text(article.title)
-                            .font(.headline)
-                        Text(article.description ?? "")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
+                    NavigationLink(destination: NewsDetailView(article: article).environmentObject(newsViewModel)) {
+                        VStack(alignment: .leading) {
+                            Text(article.title)
+                                .font(.headline)
+                            Text(article.description?.prefix(100).appending("...") ?? "")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
                     }
                 }
             }

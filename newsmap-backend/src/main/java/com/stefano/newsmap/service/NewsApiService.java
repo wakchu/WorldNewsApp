@@ -73,6 +73,12 @@ public class NewsApiService {
             logger.info("Received {} articles from the API for country: {}", newsApiResponse.getResults().size(), countryCode);
 
             for (NewsApiResponse.Article article : newsApiResponse.getResults()) {
+                // Check if news with this URL already exists
+                if (article.getUrl() != null && newsRepository.findByUrl(article.getUrl()).isPresent()) {
+                    logger.info("News with URL {} already exists, skipping.", article.getUrl());
+                    continue;
+                }
+
                 // Source
                 Source source = sourceRepository.findByName(article.getSourceName())
                         .orElseGet(() -> {

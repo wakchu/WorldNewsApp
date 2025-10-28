@@ -11,7 +11,7 @@ class NewsViewModel: ObservableObject {
         self.newsService = newsService
     }
     
-
+    
     func loadNews(for isoCode: String, token: String?) async {
         print("NewsViewModel: Loading news for country: \(isoCode)")
         isLoading = true
@@ -25,5 +25,9 @@ class NewsViewModel: ObservableObject {
             self.articles = []
         }
         isLoading = false
+    }
+    
+    func addBookmark(newsId: Int, token: String?) async throws {
+        try await newsService.addBookmark(newsId: newsId, token: token)
     }
 }

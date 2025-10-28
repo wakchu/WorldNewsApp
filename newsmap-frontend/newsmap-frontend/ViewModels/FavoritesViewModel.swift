@@ -9,6 +9,11 @@ class FavoritesViewModel: ObservableObject {
 
     private let userService = UserService()
     private let authService = AuthService()
+    private let newsService: NewsService
+
+    init(newsService: NewsService = NewsService()) {
+        self.newsService = newsService
+    }
 
     func getMyProfile() async {
         isLoading = true
@@ -57,8 +62,8 @@ class FavoritesViewModel: ObservableObject {
         }
     }
 
-    func addFavoriteNews(newsId: Int) async {
-        guard let token = KeychainHelper.standard.read(service: "auth", account: "jwt") else {
+    func addFavoriteNews(newsId: Int, token: String?) async {
+        guard let token = token ?? KeychainHelper.standard.read(service: "auth", account: "jwt") else {
             errorMessage = "User not logged in"
             return
         }

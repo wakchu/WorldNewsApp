@@ -10,10 +10,13 @@ struct MapView: View {
 
     var body: some View {
         MapViewControllerRepresentable(selectedCountry: $selectedCountry, showingNews: $showingNews, newsViewModel: newsViewModel)
+            .id("mapViewRepresentable") // Add a stable ID
             .edgesIgnoringSafeArea(.all)
             .sheet(isPresented: $showingNews) {
-                if let country = selectedCountry {
-                    NewsListView(newsViewModel: newsViewModel, countryCode: country.alpha2)
+                NavigationStack {
+                    if let country = selectedCountry {
+                        NewsListView(newsViewModel: newsViewModel, countryCode: country.alpha2)
+                    }
                 }
             }
     }

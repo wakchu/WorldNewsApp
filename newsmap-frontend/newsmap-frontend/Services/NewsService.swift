@@ -44,4 +44,8 @@ class NewsService {
     func getArticle(by id: Int, token: String? = nil) async throws -> NewsArticleResponse {
         return try await api.get(endpoint: "/news/\(id)", token: token)
     }
+
+    func addBookmark(newsId: Int, token: String?) async throws {
+        try await api.postEmpty(endpoint: "/api/users/me/bookmarks/\(newsId)", token: token)
+    }
 }
