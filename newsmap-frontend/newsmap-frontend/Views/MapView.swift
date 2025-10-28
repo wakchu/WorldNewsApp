@@ -7,6 +7,7 @@ struct MapView: View {
     @State private var selectedCountry: CountryGeoData? = nil
     @State private var showingNews: Bool = false
     @StateObject var newsViewModel = NewsViewModel()
+    @EnvironmentObject var favoritesViewModel: FavoritesViewModel
 
     var body: some View {
         MapViewControllerRepresentable(selectedCountry: $selectedCountry, showingNews: $showingNews, newsViewModel: newsViewModel)
@@ -15,7 +16,8 @@ struct MapView: View {
             .sheet(isPresented: $showingNews) {
                 NavigationStack {
                     if let country = selectedCountry {
-                        NewsListView(newsViewModel: newsViewModel, countryCode: country.alpha2)
+                        NewsListView(newsViewModel: newsViewModel, countryCode: country.alpha2, countryName: country.country)
+                            .environmentObject(favoritesViewModel)
                     }
                 }
             }

@@ -30,8 +30,8 @@ public class User {
     @ManyToMany
     @JoinTable(
         name = "user_favorite_countries",
-        joinColumns = @JoinColumn(name = "user_id", insertable = false, updatable = false),
-        inverseJoinColumns = @JoinColumn(name = "country_iso", referencedColumnName = "iso_code", insertable = false, updatable = false)
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "country_iso", referencedColumnName = "iso_code")
     )
     private Set<Country> favoriteCountries = new HashSet<>();
 

@@ -43,17 +43,31 @@ struct NewsDetailView: View {
         }
         .navigationTitle("News Detail")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            // Check if the news is already bookmarked when the view appears
+            if let user = favoritesViewModel.user {
+                isBookmarked = user.favoriteNews.contains(where: { $0.id == article.id })
+            }
+        }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     Task {
                         let token = KeychainHelper.standard.read(service: "auth", account: "jwt")
                         do {
-                            try await favoritesViewModel.addFavoriteNews(newsId: article.id, token: token)
-                            isBookmarked = true // Update UI on success
-                            print("News bookmarked successfully!")
+                            if isBookmarked {
+                                // If already bookmarked, remove it
+                                try await favoritesViewModel.removeFavoriteNews(newsId: article.id, token: token)
+                                isBookmarked = false
+                                print("News unbookmarked successfully!")
+                            } else {
+                                // If not bookmarked, add it
+                                try await favoritesViewModel.addFavoriteNews(newsId: article.id, token: token)
+                                isBookmarked = true
+                                print("News bookmarked successfully!")
+                            }
                         } catch {
-                            print("Error bookmarking news: \(error.localizedDescription)")
+                            print("Error bookmarking/unbookmarking news: \(error.localizedDescription)")
                         }
                     }
                 } label: {
