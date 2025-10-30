@@ -93,13 +93,7 @@ CREATE TABLE user_favorite_country (
   CONSTRAINT fk_ufc_country FOREIGN KEY (country_iso) REFERENCES country(iso_code) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 8) Cache raw (opzionale): memorizza JSON raw della risposta API per TTL
-CREATE TABLE news_cache (
-  cache_key VARCHAR(255) PRIMARY KEY,
-  response_json LONGTEXT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  expires_at DATETIME
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 -- 9) Indici utili
 CREATE INDEX idx_news_published_at ON news (published_at);
