@@ -2,6 +2,9 @@
 import SwiftUI
 
 struct AppHeaderView: View {
+    @Binding var selectedTab: Int
+    @Binding var showingSettings: Bool
+
     var body: some View {
         HStack {
             Text("WorldNewsApp")
@@ -11,21 +14,10 @@ struct AppHeaderView: View {
 
             Spacer()
 
-            Menu {
-                NavigationLink(destination: MapView()) {
-                    Label("Home", systemImage: "house.fill")
-                }
-                NavigationLink(destination: SettingsView()) {
-                    Label("Settings", systemImage: "gear")
-                }
-                NavigationLink(destination: FavoriteNewsView()) {
-                    Label("Favorite News", systemImage: "newspaper")
-                }
-                NavigationLink(destination: FavoriteNationsView()) {
-                    Label("Favorite Nations", systemImage: "flag.fill")
-                }
-            } label: {
-                Image(systemName: "line.horizontal.3")
+            Button(action: {
+                showingSettings = true
+            }) {
+                Image(systemName: "gear")
                     .imageScale(.large)
                     .padding(.trailing)
             }
@@ -38,7 +30,7 @@ struct AppHeaderView: View {
 struct AppHeaderView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack { // Wrap in NavigationStack for NavigationLink to work in preview
-            AppHeaderView()
+            AppHeaderView(selectedTab: .constant(0), showingSettings: .constant(false))
         }
     }
 }

@@ -7,7 +7,17 @@ struct NewsArticleResponse: Decodable {
     let url: String
     let imageUrl: String?
     let publishedAt: String
-    let sourceName: String
+    let source: SourceResponse
+
+    var sourceName: String {
+        source.name
+    }
+}
+
+struct SourceResponse: Decodable {
+    let id: Int
+    let name: String
+    let url: String?
 }
 
 class NewsService {
@@ -22,6 +32,7 @@ class NewsService {
     }
 
     func getNews(for isoCode: String, token: String? = nil) async throws -> [NewsArticleResponse] {
+        print("Calling getNews for country \(isoCode)")
         return try await api.get(endpoint: "/api/news/by-country/\(isoCode)", token: token)
     }
 
@@ -32,5 +43,9 @@ class NewsService {
     // Dettaglio articolo singolo
     func getArticle(by id: Int, token: String? = nil) async throws -> NewsArticleResponse {
         return try await api.get(endpoint: "/news/\(id)", token: token)
+    }
+
+    func addBookmark(newsId: Int, token: String?) async throws {
+        try await api.postEmpty(endpoint: "/api/users/me/bookmarks/\(newsId)", token: token)
     }
 }

@@ -22,6 +22,7 @@ public class News {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+    @Column(length = 2048)
     private String url;
     @Column(length = 2048)
     private String imageUrl;

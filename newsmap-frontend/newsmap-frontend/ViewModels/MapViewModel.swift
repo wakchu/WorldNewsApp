@@ -15,8 +15,8 @@ class MapViewModel: ObservableObject {
     // Carica tutti i paesi dal backend
     func loadCountries() async {
         do {
-            let result = try await countryService.getAllCountries()
-            self.countries = result
+            // Removed call to countryService.getAllCountries() as it's not needed at app start
+            // and was causing a 403 Forbidden error before authentication.
         } catch {
             print("Errore caricamento paesi: \(error)")
             self.countries = []

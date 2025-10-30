@@ -2,64 +2,70 @@ import SwiftUI
 
 struct FavoriteNewsView: View {
     @Environment(\.presentationMode) var presentationMode
-    @StateObject private var viewModel = FavoritesViewModel()
+    @EnvironmentObject var viewModel: FavoritesViewModel
+    @State private var showingDeleteAlert = false
+    @State private var newsToDelete: News?
 
     var body: some View {
-        NavigationStack {
-            VStack {
-                AppHeaderView()
-                HStack {
-                    Button(action: {
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
-                        HStack {
-                            Image(systemName: "chevron.backward")
-                            Text("Back")
-                        }
-                    }
-                    .padding()
-                    Spacer()
-                }
-                
-                if viewModel.isLoading {
-                    ProgressView()
-                } else if let user = viewModel.user {
-                    List(user.favoriteNews) { news in
-                        HStack {
+        VStack {
+            if viewModel.isLoading {
+                ProgressView()
+            } else if let user = viewModel.user {
+                List(user.favoriteNews) { news in
+                    HStack {
+                        NavigationLink(destination: NewsDetailView(article: news.toNewsArticleResponse())) {
                             VStack(alignment: .leading) {
                                 Text(news.title)
                                     .font(.headline)
-                                Text(news.description ?? "")
+                                Text(news.description?.prefix(100).appending("...") ?? "")
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                             }
-                            Spacer()
-                            Button(action: {
-                                Task {
-                                    await viewModel.removeFavoriteNews(newsId: news.id)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        Spacer()
+                        Button(action: {}) {
+                            Image(systemName: "trash")
+                                .foregroundColor(.red)
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    newsToDelete = news
+                                    showingDeleteAlert = true
                                 }
-                            }) {
-                                Image(systemName: "trash")
-                                    .foregroundColor(.red)
-                            }
                         }
                     }
-                } else {
-                    Text("No favorite news found.")
+                }
+            } else {
+                Text("No favorite news found.")
+            }
+        }
+        .onAppear {
+            Task {
+                await viewModel.getMyProfile()
+            }
+        }
+        .navigationTitle("Favorite News")
+        .alert("Delete Favorite News", isPresented: $showingDeleteAlert) {
+            Button("Delete", role: .destructive) {
+                if let news = newsToDelete {
+                    Task {
+                        let token = KeychainHelper.standard.read(service: "auth", account: "jwt")
+                        await viewModel.removeFavoriteNews(newsId: news.id, token: token)
+                        await viewModel.getMyProfile()
+                        newsToDelete = nil
+                    }
                 }
             }
-            .onAppear {
-                Task {
-                    await viewModel.getMyProfile()
-                }
+            Button("Cancel", role: .cancel) {
+                newsToDelete = nil
             }
-            .navigationBarHidden(true)
+        } message: {
+            Text("Are you sure you want to remove this news from your favorites?")
         }
     }
-}
-
-struct FavoriteNewsView_Previews: PreviewProvider {
+};struct FavoriteNewsView_Previews: PreviewProvider {
     static var previews: some View {
         FavoriteNewsView()
+            .environmentObject(FavoritesViewModel())
     }
 }

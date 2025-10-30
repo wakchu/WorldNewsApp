@@ -1,26 +1,34 @@
 import SwiftUI
 
 struct FavoritesView: View {
+    @State private var selectedView: String = "Nations"
+    let viewOptions = ["Nations", "News"]
+
     var body: some View {
-        NavigationStack {
-            TabView {
-                FavoriteNationsView()
-                    .tabItem {
-                        Label("Nations", systemImage: "flag.fill")
-                    }
-                
-                FavoriteNewsView()
-                    .tabItem {
-                        Label("News", systemImage: "newspaper.fill")
-                    }
+        VStack {
+            Picker("Select View", selection: $selectedView) {
+                ForEach(viewOptions, id: \.self) {
+                    Text($0)
+                }
             }
-            .navigationBarHidden(true)
+            .pickerStyle(.segmented)
+            .padding()
+
+            if selectedView == "Nations" {
+                FavoriteNationsView()
+            } else {
+                FavoriteNewsView()
+            }
         }
+        .navigationTitle("Favorites")
     }
 }
 
 struct FavoritesView_Previews: PreviewProvider {
     static var previews: some View {
-        FavoritesView()
+        NavigationStack {
+            FavoritesView()
+                .environmentObject(FavoritesViewModel())
+        }
     }
 }

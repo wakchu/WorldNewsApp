@@ -30,25 +30,20 @@ private struct RootView: View {
     @EnvironmentObject private var authVM: AuthViewModel
     @EnvironmentObject private var mapVM: MapViewModel
     @EnvironmentObject private var newsVM: NewsViewModel
+    @AppStorage("isDarkMode") private var isDarkMode = false
+    @State private var selectedTab: Int = 0 // 0 for Map, 1 for Favorites
+    @State private var showingSettings: Bool = false
     
     var body: some View {
         Group {
             if authVM.isLoggedIn {
-                TabView {
+                VStack(spacing: 0) {
+                    AppHeaderView(selectedTab: $selectedTab, showingSettings: $showingSettings)
+                    AppTabBarView(selectedTab: $selectedTab)
+                }
+                .sheet(isPresented: $showingSettings) {
                     NavigationStack {
-                        MapView()
-                    }
-                    .tabItem {
-                        Label("Mappa", systemImage: "map")
-                    }
-                    
-
-                    
-                    NavigationStack {
-                        FavoritesView()
-                    }
-                    .tabItem {
-                        Label("Preferiti", systemImage: "star")
+                        SettingsView()
                     }
                 }
                 .task {
@@ -65,8 +60,10 @@ private struct RootView: View {
         .id(authVM.isLoggedIn) // Add this line
         .task(id: mapVM.selectedCountry?.code) {
             if let countryResponse = mapVM.selectedCountry {
-                await newsVM.loadNews(for: countryResponse.code)
+                let token = KeychainHelper.standard.read(service: "auth", account: "jwt")
+                await newsVM.loadNews(for: countryResponse.code, token: token)
             }
         }
+        .preferredColorScheme(isDarkMode ? .dark : .light)
     }
 }

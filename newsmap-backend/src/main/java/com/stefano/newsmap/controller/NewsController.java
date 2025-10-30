@@ -7,12 +7,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/news")
 public class NewsController {
+
+    private static final Logger logger = LoggerFactory.getLogger(NewsController.class);
 
     @Autowired
     private NewsRepository newsRepository;
@@ -31,7 +35,10 @@ public class NewsController {
      */
     @GetMapping("/by-country/{isoCode}")
     public List<News> getNewsByCountry(@PathVariable String isoCode) {
-        return newsRepository.findAllByCountriesIsoCodeOrderByPublishedAtDesc(isoCode);
+        logger.info("Received request for news by country: {}", isoCode);
+        List<News> newsList = newsRepository.findAllByCountriesIsoCodeOrderByPublishedAtDesc(isoCode.toUpperCase());
+        logger.info("Returning {} news articles for country: {}", newsList.size(), isoCode);
+        return newsList;
     }
 
     @GetMapping("/{id}")

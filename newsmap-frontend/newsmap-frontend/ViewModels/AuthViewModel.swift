@@ -9,6 +9,7 @@ class AuthViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     @Published var isLoggedIn: Bool = false
+    @Published var registrationSuccess: Bool = false
     
     private let authService = AuthService()
     
@@ -52,8 +53,7 @@ class AuthViewModel: ObservableObject {
         do {
             let success = try await authService.register(username: username, password: password)
             if success {
-                // Directly login after successful registration
-                await login()
+                registrationSuccess = true
             } else {
                 errorMessage = "Registrazione fallita"
             }

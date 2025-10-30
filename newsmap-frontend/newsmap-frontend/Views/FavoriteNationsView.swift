@@ -2,58 +2,67 @@ import SwiftUI
 
 struct FavoriteNationsView: View {
     @Environment(\.presentationMode) var presentationMode
-    @StateObject private var viewModel = FavoritesViewModel()
+    @EnvironmentObject var viewModel: FavoritesViewModel
+    @State private var showingDeleteAlert = false
+    @State private var countryToDelete: Country?
 
     var body: some View {
-        NavigationStack {
-            VStack {
-                AppHeaderView()
-                HStack {
-                    Button(action: {
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
-                        HStack {
-                            Image(systemName: "chevron.backward")
-                            Text("Back")
-                        }
-                    }
-                    .padding()
-                    Spacer()
-                }
-                
-                if viewModel.isLoading {
-                    ProgressView()
-                } else if let user = viewModel.user {
-                    List(user.favoriteCountries) { country in
-                        HStack {
+        VStack {
+            if viewModel.isLoading {
+                ProgressView()
+            } else if let user = viewModel.user {
+                List(user.favoriteCountries) { country in
+                    HStack {
+                        NavigationLink(destination: NewsListView(newsViewModel: NewsViewModel(), countryCode: country.isoCode, countryName: country.name)) {
                             Text(country.name)
-                            Spacer()
-                            Button(action: {
-                                Task {
-                                    await viewModel.removeFavoriteCountry(isoCode: country.isoCode)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        Spacer()
+                        Button(action: {}) {
+                            Image(systemName: "trash")
+                                .foregroundColor(.red)
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    countryToDelete = country
+                                    showingDeleteAlert = true
                                 }
-                            }) {
-                                Image(systemName: "trash")
-                                    .foregroundColor(.red)
-                            }
                         }
                     }
-                } else {
-                    Text("No favorite countries found.")
+                }
+            } else {
+                Text("No favorite countries found.")
+            }
+        }
+        .onAppear {
+            Task {
+                await viewModel.getMyProfile()
+            }
+        }
+        .navigationTitle("Favorite Nations")
+        .alert("Delete Favorite Country", isPresented: $showingDeleteAlert) {
+            Button("Delete", role: .destructive) {
+                if let country = countryToDelete {
+                    Task {
+                        let token = KeychainHelper.standard.read(service: "auth", account: "jwt")
+                        await viewModel.removeFavoriteCountry(isoCode: country.isoCode, token: token)
+                        await viewModel.getMyProfile()
+                        countryToDelete = nil
+                    }
                 }
             }
-            .onAppear {
-                Task {
-                    await viewModel.getMyProfile()
-                }
+            Button("Cancel", role: .cancel) {
+                countryToDelete = nil
             }
-            .navigationBarHidden(true)
+        } message: {
+            Text("Are you sure you want to remove this country from your favorites?")
+        }
         }
     }
-}
+
 
 struct FavoriteNationsView_Previews: PreviewProvider {
     static var previews: some View {
         FavoriteNationsView()
+            .environmentObject(FavoritesViewModel())
     }
 }
