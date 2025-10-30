@@ -10,6 +10,7 @@ WorldNewsApp is a mobile application that allows users to explore the latest new
 *   **Latest News:** Get up-to-date news headlines for chosen countries.
 *   **User Authentication:** Secure user registration and login.
 *   **Favorite Countries:** Save your preferred countries for quick access to their news.
+*   **Bookmark News:** Bookmark your preferred news for reading it later.
 
 ## Technologies Used
 
