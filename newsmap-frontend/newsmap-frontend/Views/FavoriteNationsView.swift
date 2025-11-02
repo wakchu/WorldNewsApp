@@ -5,13 +5,23 @@ struct FavoriteNationsView: View {
     @EnvironmentObject var viewModel: FavoritesViewModel
     @State private var showingDeleteAlert = false
     @State private var countryToDelete: Country?
+    @State private var searchText = ""
+
+    var filteredCountries: [Country] {
+        guard let user = viewModel.user else { return [] }
+        if searchText.isEmpty {
+            return user.favoriteCountries
+        } else {
+            return user.favoriteCountries.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+        }
+    }
 
     var body: some View {
         VStack {
             if viewModel.isLoading {
                 ProgressView()
-            } else if let user = viewModel.user {
-                List(user.favoriteCountries) { country in
+            } else if viewModel.user != nil {
+                List(filteredCountries) { country in
                     HStack {
                         NavigationLink(destination: NewsListView(newsViewModel: NewsViewModel(), countryCode: country.isoCode, countryName: country.name)) {
                             Text(country.name)
@@ -33,6 +43,7 @@ struct FavoriteNationsView: View {
                 Text("No favorite countries found.")
             }
         }
+        .searchable(text: $searchText)
         .onAppear {
             Task {
                 await viewModel.getMyProfile()

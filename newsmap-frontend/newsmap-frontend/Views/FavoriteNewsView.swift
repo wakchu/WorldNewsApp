@@ -5,13 +5,26 @@ struct FavoriteNewsView: View {
     @EnvironmentObject var viewModel: FavoritesViewModel
     @State private var showingDeleteAlert = false
     @State private var newsToDelete: News?
+    @State private var searchText = ""
+
+    var filteredNews: [News] {
+        guard let user = viewModel.user else { return [] }
+        if searchText.isEmpty {
+            return user.favoriteNews
+        } else {
+            return user.favoriteNews.filter { 
+                $0.title.localizedCaseInsensitiveContains(searchText) || 
+                ($0.description?.localizedCaseInsensitiveContains(searchText) ?? false)
+            }
+        }
+    }
 
     var body: some View {
         VStack {
             if viewModel.isLoading {
                 ProgressView()
-            } else if let user = viewModel.user {
-                List(user.favoriteNews) { news in
+            } else if viewModel.user != nil {
+                List(filteredNews) { news in
                     HStack {
                         NavigationLink(destination: NewsDetailView(article: news.toNewsArticleResponse())) {
                             VStack(alignment: .leading) {
@@ -39,6 +52,7 @@ struct FavoriteNewsView: View {
                 Text("No favorite news found.")
             }
         }
+        .searchable(text: $searchText)
         .onAppear {
             Task {
                 await viewModel.getMyProfile()
