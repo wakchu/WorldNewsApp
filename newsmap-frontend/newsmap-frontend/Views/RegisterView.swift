@@ -13,50 +13,73 @@ struct RegisterView: View {
     
     var body: some View {
         ZStack {
-            Color(.systemGray6).ignoresSafeArea()
+            Color(red: 56/255, green: 182/255, blue: 255/255).ignoresSafeArea()
             
             ScrollView {
                 VStack(spacing: 24) {
-                    Text("Registrati")
-                        .font(.custom("BBHSansHegarty-Regular", size: 34))
+                    Image("logo")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: 250)
                         .padding(.top, 60)
-                        .foregroundColor(.accentColor)
                     
                     VStack(spacing: 16) {
                         TextField("Username", text: $viewModel.username)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .keyboardType(.default)
                             .autocapitalization(.none)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color(red: 41/255, green: 41/255, blue: 41/255), lineWidth: 1)
+                            )
                         
-                        HStack {
+                        ZStack(alignment: .trailing) {
                             if isPasswordVisible {
                                 TextField("Password", text: $viewModel.password)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .stroke(Color(red: 41/255, green: 41/255, blue: 41/255), lineWidth: 1)
+                                    )
                             } else {
                                 SecureField("Password", text: $viewModel.password)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .stroke(Color(red: 41/255, green: 41/255, blue: 41/255), lineWidth: 1)
+                                    )
                             }
                             Button(action: {
                                 isPasswordVisible.toggle()
                             }) {
                                 Image(systemName: isPasswordVisible ? "eye.slash" : "eye")
                                     .foregroundColor(.gray)
+                                    .padding(.trailing, 8)
                             }
                         }
                         
-                        HStack {
+                        ZStack(alignment: .trailing) {
                             if isConfirmPasswordVisible {
                                 TextField("Conferma Password", text: $confirmPassword)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .stroke(Color(red: 41/255, green: 41/255, blue: 41/255), lineWidth: 1)
+                                    )
                             } else {
                                 SecureField("Conferma Password", text: $confirmPassword)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .stroke(Color(red: 41/255, green: 41/255, blue: 41/255), lineWidth: 1)
+                                    )
                             }
                             Button(action: {
                                 isConfirmPasswordVisible.toggle()
                             }) {
                                 Image(systemName: isConfirmPasswordVisible ? "eye.slash" : "eye")
                                     .foregroundColor(.gray)
+                                    .padding(.trailing, 8)
                             }
                         }
                     }
@@ -87,7 +110,7 @@ struct RegisterView: View {
                         } else {
                             Text("Registrati")
                                 .fontWeight(.semibold)
-                                .foregroundColor(.primary)
+                                .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding()
                                 .background(Color.accentColor.opacity(isRegisterFormValid ? 1 : 0.5))
@@ -96,11 +119,18 @@ struct RegisterView: View {
                     }
                     .padding(.horizontal)
                     .disabled(!isRegisterFormValid || viewModel.isLoading)
+
+                    Button("Torna al Login") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                    .font(.footnote)
+                    .foregroundColor(Color(red: 41/255, green: 41/255, blue: 41/255))
+                    .padding(.top, 8)
                     
                     Spacer()
                 }
                 .padding()
-                .background(Material.regular)
+                
                 .cornerRadius(20)
                 .padding()
             }
