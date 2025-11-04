@@ -31,10 +31,8 @@ public class Country {
     @Column(name = "inserted_at", updatable = false, insertable = false)
     private LocalDateTime insertedAt;
 
-    // Costruttore di default richiesto da JPA
     public Country() {}
 
-    // Costruttore completo
     public Country(String isoCode, String name, String region, BigDecimal lat, BigDecimal lon, String timezone) {
         this.isoCode = isoCode;
         this.name = name;
@@ -44,7 +42,6 @@ public class Country {
         this.timezone = timezone;
     }
 
-    // Getter e Setter
     public String getIsoCode() {
         return isoCode;
     }

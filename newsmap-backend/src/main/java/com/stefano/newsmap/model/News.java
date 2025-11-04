@@ -36,7 +36,6 @@ public class News {
     )
     private Set<Country> countries = new HashSet<>();
 
-    // costruttori, getter e setter
     public News() {
     }
     public News(Source source, String title, String description, String url, String imageUrl, LocalDateTime publishedAt, Set<Country> countries) {
@@ -97,7 +96,6 @@ public class News {
         this.countries = countries;
     }
 
-    //To string
     @Override
     public String toString() {
         return "News{" +

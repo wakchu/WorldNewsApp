@@ -19,7 +19,6 @@ public class Source {
     @OneToMany(mappedBy = "source")
     private List<News> newsList;
 
-    // costruttori, getter e setter
     public Source() {
     }
 
@@ -45,7 +44,6 @@ public class Source {
     public void setUrl(String url) {
         this.url = url;
     }
-    // To String
     @Override
     public String toString() {
         return "Source{" +

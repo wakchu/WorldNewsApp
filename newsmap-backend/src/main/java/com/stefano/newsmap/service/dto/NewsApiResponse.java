@@ -8,7 +8,6 @@ public class NewsApiResponse {
     private int totalResults;
     private List<Article> results;
 
-    // getter e setter
     public String getStatus() {
         return status;
     }
@@ -36,13 +35,12 @@ public class NewsApiResponse {
         private String title;
         private String description;
         @JsonProperty("link")
-        private String url; // Renamed from 'url' to 'link' in JSON, but keeping 'url' in Java for consistency with News model
+        private String url;
         @JsonProperty("pubDate")
-        private String publishedAt; // Renamed from 'publishedAt' to 'pubDate' in JSON, but keeping 'publishedAt' in Java for consistency with News model
+        private String publishedAt;
         @JsonProperty("image_url")
         private String imageUrl;
 
-        // Getters and Setters
         public String getArticleId() {
             return articleId;
         }

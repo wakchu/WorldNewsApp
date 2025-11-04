@@ -41,7 +41,6 @@ public class NewsService {
     public void saveNews(String title, String description, String url,
                          LocalDateTime publishedAt, String sourceName, List<String> countryCodes) {
 
-        // Recupera o crea la fonte
         Source source = sourceRepository.findByName(sourceName)
                 .orElseGet(() -> {
                     Source s = new Source();
@@ -49,13 +48,12 @@ public class NewsService {
                     return sourceRepository.save(s);
                 });
 
-        // Recupera i country dal DB
         Set<Country> countries = new HashSet<>();
         for (String code : countryCodes) {
             countryRepository.findById(code).ifPresent(countries::add);
         }
 
-        // Crea la news
+
         News news = new News();
         news.setTitle(title);
         news.setDescription(description);
@@ -63,7 +61,7 @@ public class NewsService {
         news.setPublishedAt(publishedAt);
         news.setSource(source);
 
-        // Salva la news
+
         newsRepository.save(news);
     }
 }

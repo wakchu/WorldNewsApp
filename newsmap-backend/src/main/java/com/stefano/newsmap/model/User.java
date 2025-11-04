@@ -24,7 +24,7 @@ public class User {
     private String email;
 
     @Column(name="role", nullable = false)
-    private String role = "USER"; // default USER
+    private String role = "USER";
 
 
     @ManyToMany
@@ -43,7 +43,6 @@ public class User {
     )
     private Set<News> favoriteNews = new HashSet<>();
 
-    // Getters & Setters
     public Long getId() { return id; }
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
