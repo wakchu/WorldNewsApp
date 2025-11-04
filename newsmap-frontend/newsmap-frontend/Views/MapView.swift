@@ -2,7 +2,6 @@ import SwiftUI
 import MapKit
 import CoreLocation
 
-// MARK: - MapView (SwiftUI)
 struct MapView: View {
     @State private var selectedCountry: CountryGeoData? = nil
     @State private var showingNews: Bool = false
@@ -11,7 +10,7 @@ struct MapView: View {
 
     var body: some View {
         MapViewControllerRepresentable(selectedCountry: $selectedCountry, showingNews: $showingNews, newsViewModel: newsViewModel)
-            .id("mapViewRepresentable") // Add a stable ID
+            .id("mapViewRepresentable")
             .edgesIgnoringSafeArea(.all)
             .sheet(isPresented: $showingNews) {
                 NavigationStack {
@@ -44,7 +43,6 @@ struct MapViewControllerRepresentable: UIViewRepresentable {
         Coordinator(self)
     }
 
-    // MARK: - Coordinator (MKMapViewDelegate)
             class Coordinator: NSObject, MKMapViewDelegate {
                 var parent: MapViewControllerRepresentable
                 var mapView: MKMapView?
@@ -75,7 +73,6 @@ struct MapViewControllerRepresentable: UIViewRepresentable {
     
                 func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
                     if let annotation = view.annotation, let countryName = annotation.title, let country = countries.first(where: { $0.country == countryName }) {
-                        // Deselect the annotation to ensure navigation re-triggers even if the same country is selected
                         mapView.deselectAnnotation(annotation, animated: false)
                         
                         Task {

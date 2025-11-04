@@ -31,7 +31,7 @@ private struct RootView: View {
     @EnvironmentObject private var mapVM: MapViewModel
     @EnvironmentObject private var newsVM: NewsViewModel
     @AppStorage("isDarkMode") private var isDarkMode = false
-    @State private var selectedTab: Int = 0 // 0 for Map, 1 for Favorites
+    @State private var selectedTab: Int = 0 // 0 per la Map, 1 per i Favorites
     @State private var showingSettings: Bool = false
     
     var body: some View {
@@ -57,7 +57,7 @@ private struct RootView: View {
                 }
             }
         }
-        .id(authVM.isLoggedIn) // Add this line
+        .id(authVM.isLoggedIn)
         .task(id: mapVM.selectedCountry?.code) {
             if let countryResponse = mapVM.selectedCountry {
                 let token = KeychainHelper.standard.read(service: "auth", account: "jwt")

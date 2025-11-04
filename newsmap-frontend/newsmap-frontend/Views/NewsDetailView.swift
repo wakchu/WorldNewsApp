@@ -3,7 +3,7 @@ import SwiftUI
 struct NewsDetailView: View {
     let article: NewsArticleResponse
     @State private var isBookmarked: Bool = false
-    @EnvironmentObject var favoritesViewModel: FavoritesViewModel // Use FavoritesViewModel
+    @EnvironmentObject var favoritesViewModel: FavoritesViewModel
 
     var body: some View {
         ScrollView {
@@ -44,7 +44,6 @@ struct NewsDetailView: View {
         .navigationTitle("News Detail")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            // Check if the news is already bookmarked when the view appears
             if let user = favoritesViewModel.user {
                 isBookmarked = user.favoriteNews.contains(where: { $0.id == article.id })
             }
@@ -56,12 +55,10 @@ struct NewsDetailView: View {
                         let token = KeychainHelper.standard.read(service: "auth", account: "jwt")
                         do {
                             if isBookmarked {
-                                // If already bookmarked, remove it
                                 try await favoritesViewModel.removeFavoriteNews(newsId: article.id, token: token)
                                 isBookmarked = false
                                 print("News unbookmarked successfully!")
                             } else {
-                                // If not bookmarked, add it
                                 try await favoritesViewModel.addFavoriteNews(newsId: article.id, token: token)
                                 isBookmarked = true
                                 print("News bookmarked successfully!")

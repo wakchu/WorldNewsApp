@@ -26,7 +26,6 @@ class NewsService {
     
     // Carica le notizie principali di un paese
     func getTopHeadlines(for countryCode: String, token: String? = nil) async throws -> [NewsArticleResponse] {
-        // Costruisce l'endpoint: /news?country=IT
         let queryItems = [URLQueryItem(name: "country", value: countryCode)]
         return try await api.get(endpoint: "/news", queryItems: queryItems, token: token)
     }

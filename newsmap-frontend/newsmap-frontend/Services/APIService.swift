@@ -5,7 +5,6 @@ class APIService {
     let baseURL = Config.shared.baseURL
 
     
-    // MARK: - Generic GET
     func get<T: Decodable>(endpoint: String, queryItems: [URLQueryItem]? = nil, token: String? = nil) async throws -> T {
         guard var urlComponents = URLComponents(string: baseURL + endpoint) else {
             throw URLError(.badURL)
@@ -27,7 +26,6 @@ class APIService {
         return try JSONDecoder().decode(T.self, from: data)
     }
     
-    // MARK: - Generic POST
     func post<T: Decodable, U: Encodable>(endpoint: String, body: U, token: String? = nil) async throws -> T {
         print("APIService: post called for endpoint: \(endpoint)")
         print("APIService: baseURL is: \(baseURL)")
@@ -95,7 +93,6 @@ class APIService {
         try validateResponse(response)
     }
     
-    // MARK: - Generic PUT
     func put<T: Decodable, U: Encodable>(endpoint: String, body: U, token: String? = nil) async throws -> T {
         guard let url = URL(string: baseURL + endpoint) else {
             throw URLError(.badURL)
@@ -114,7 +111,6 @@ class APIService {
         return try JSONDecoder().decode(T.self, from: data)
     }
     
-    // MARK: - Generic DELETE
     func delete(endpoint: String, token: String? = nil) async throws {
         guard let url = URL(string: baseURL + endpoint) else {
             throw URLError(.badURL)
@@ -130,7 +126,6 @@ class APIService {
         try validateResponse(response)
     }
     
-    // MARK: - Response validation
     private func validateResponse(_ response: URLResponse) throws {
         guard let httpResponse = response as? HTTPURLResponse else {
             throw URLError(.badServerResponse)

@@ -23,13 +23,13 @@ struct AppHeaderView: View {
             }
         }
         .padding(.vertical, 8)
-        .background(Color.clear) // Or a specific color if desired
+        .background(Color.clear)
     }
 }
 
 struct AppHeaderView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationStack { // Wrap in NavigationStack for NavigationLink to work in preview
+        NavigationStack { 
             AppHeaderView(selectedTab: .constant(0), showingSettings: .constant(false))
         }
     }
